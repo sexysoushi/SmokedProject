@@ -1,0 +1,13 @@
+INPUT(
+./obj\main.o
+./obj\mainwindow.o
+./obj\particle.o
+./obj\GlFramework.o
+./obj\GlWindow.o
+./obj\LF_String.o
+./obj\Object3D.o
+./obj\Basis.o
+./obj\cube.o
+./obj\TP01.o
+./obj\moc_mainwindow.o
+);
