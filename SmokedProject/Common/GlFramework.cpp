@@ -25,7 +25,6 @@
 
 using namespace std;
 
-
 void
 GLMatrix::setIdentity()
 {

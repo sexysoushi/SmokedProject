@@ -28,7 +28,14 @@ HEADERS  += mainwindow.h \
     Common/Object3D.h \
     Common/Shapes/Basis.h \
     Common/Shapes/cube.h \
-    TP01.h
+    TP01.h \
+    Common/AbstractFramework.h \
+    Common/MemDefns.h \
+    Common/RandomNumberGenerator.h \
+    Common/Types.h \
+    Common/Vectors.h \
+    shape.h \
+    particlesystem.h
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -39,4 +46,12 @@ SOURCES += main.cpp\
     Common/Object3D.cpp \
     Common/Shapes/Basis.cpp \
     Common/Shapes/cube.cpp \
-    TP01.cpp
+    TP01.cpp \
+    Common/RandomNumberGenerator.cpp \
+    shape.cpp \
+    particlesystem.cpp
+
+unix:!macx|win32: LIBS += -L$$PWD/'../soil/Simple OpenGL Image Library/lib/' -lSOIL
+
+INCLUDEPATH += $$PWD/'../soil/Simple OpenGL Image Library'
+DEPENDPATH += $$PWD/'../soil/Simple OpenGL Image Library'

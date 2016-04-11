@@ -1,19 +1,31 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
+#include "Common/GlFramework.h"
+#include "Common/Object3D.h"
+#include "shape.h"
 
-#include "GlWindow.h"
 
-class particle
+class Particle : public Object3D
 {
+
+private:
+
+    vec3   velocity; // vitesse orientée sur un axe
+    vec3   color;    // couleur de la particule
+    double       lifeTime; // durée de vie de la particule
+    double       size;     // taille de la particule
+
 public:
-    particle();
+    Particle();
+    ~Particle();
 
-double lifetime; //la durée de vie d’une particule
-double size; //taille particule (sprite ou voxel)
+    void setColor(vec3 c);
+    void setVelocity(vec3 v);
+    double getTimeAlive();
 
-//Vec3f position; //position de la particule
-//Vec3f velocity; //vitesse orientée sur un axe
-//Vec3f Color; //couleur de la particule
+    void drawParticule();
+
+
 
 //class Shape shapeParticle; //def si 2D ou 3D, si 2D def rond/carré/(triangle), si 3D def sphere/cube/(pyramide)
 

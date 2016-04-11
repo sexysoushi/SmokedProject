@@ -9,6 +9,13 @@
 #include <vector>
 #include <string>
 
+typedef struct vec3
+{
+    double x;
+    double y;
+    double z;
+
+}vec3;
 
 struct GLMatrix
 {
