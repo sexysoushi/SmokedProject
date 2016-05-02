@@ -18,6 +18,7 @@ public:
     void start();
     void stop();
     void live();
+    void update(float fDeltaTime);
 };
 
 #endif // PARTICLESYSTEM_H

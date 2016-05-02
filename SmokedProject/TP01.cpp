@@ -3,6 +3,7 @@
 
 #include "Shapes/Basis.h"
 #include "Shapes/cube.h"
+#include"particle.h"
 
 #include <iostream>
 
@@ -17,6 +18,8 @@ const GLfloat g_AngleSpeed = 10.0f;
 
 Basis* g_Basis;
 Cube* g_cube;
+Particle* g_particle;
+
 
 
 TP01::TP01()
@@ -25,6 +28,7 @@ TP01::TP01()
 
     g_Basis = new Basis( 10.0 );
     g_cube = new Cube(1.0);
+    g_particle = new Particle(2.0);
 }
 
 
@@ -43,10 +47,14 @@ TP01::initializeObjects()
 	glEnable( GL_DEPTH_TEST );
 
 	// Chargement des shaders
-    createShader( "Shaders/color" );
+    //createShader( "Shaders/color" );
+
+    createShader( "Shaders/PerVertex" );
 
     cout << "Shader color: ";
-    if (useShader( "color" ))
+    //if (useShader( "color" ))
+
+    if (useShader( "PerVertex" ))
     {
         cout << "Loaded!" << endl;
     }
@@ -67,18 +75,15 @@ TP01::render()
 
 
 	// Rendu des objets
-	pushMatrix();
+    pushMatrix();
 		rotate( angle1, 0, 1, 0 );
 		rotate( angle2, 1, 0, 0 );
-
+        rotate( angle2, 0, 0, 1 );
         g_Basis->draw();
+        g_particle->draw();
 	popMatrix();
-    pushMatrix();
-        rotate( angle1, 0, 1, 0 );
-        rotate( angle2, 1, 0, 0 );
 
-        g_cube->draw();
-    popMatrix();
+
 
 }
 

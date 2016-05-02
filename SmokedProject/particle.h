@@ -14,16 +14,26 @@ private:
     vec3   color;    // couleur de la particule
     double       lifeTime; // durée de vie de la particule
     double       size;     // taille de la particule
+    double age;
+
+    double depth;
 
 public:
     Particle();
+    Particle(double s);
     ~Particle();
 
     void setColor(vec3 c);
     void setVelocity(vec3 v);
     double getTimeAlive();
 
-    void drawParticule();
+    //void drawParticule();
+
+protected:
+    void drawShape();
+
+private:
+    GLfloat m_TabVertices[4*3];
 
 
 

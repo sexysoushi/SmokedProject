@@ -35,7 +35,9 @@ HEADERS  += mainwindow.h \
     Common/Types.h \
     Common/Vectors.h \
     shape.h \
-    particlesystem.h
+    particlesystem.h \
+    rubiks.h \
+    Common/Shapes/rubiks.h
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -49,7 +51,8 @@ SOURCES += main.cpp\
     TP01.cpp \
     Common/RandomNumberGenerator.cpp \
     shape.cpp \
-    particlesystem.cpp
+    particlesystem.cpp \
+    Common/Shapes/rubiks.cpp
 
 unix:!macx|win32: LIBS += -L$$PWD/'../soil/Simple OpenGL Image Library/lib/' -lSOIL
 
