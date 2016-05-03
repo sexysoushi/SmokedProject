@@ -1,0 +1,40 @@
+\chapter{Améliorations possibles}
+
+% TODO Lunpe
+% Ajout de trajectoires différentes, gestion de plusieurs points d'émission,
+% intégration à un environnement, flexibilité
+
+Bien qu'on puisse considérer le projet comme fini, il y a toujours des choses
+que nous pourrions ajouter ou améliorer. Ce sont des améliorations qui sont
+dans le domaine du nice-to-have et que nous n'avons pas implémenté.
+
+\section{Ajout de trajectoires différentes}
+Nous avons une base de shaders très simples qui permettent de déplacer nos
+particules correctement. Cela dit, ces déplacements ne sont pas toujours très
+impressionnants. Une amélioration possible serait d'ajouter plein de types de
+forces différentes et de sélectionner lesquelles appliquer à nos particules
+(gravité, force radiale, rappel vers le point d'émission, ajout d'un spin à la
+trajectoire ou autres). Certaines de ces choses seraient faciles à implémenter (gravité
+ou rappel vers le point d'émission) alors que d'autres demanderaient plus de réflexion
+afin de déterminer les bonne forces (et dans quelles directions) appliquer uniquement
+en fonction du temps. Il serait ainsi possible de conjuguer toutes ces forces
+afin d'avoir des comportements plus poussés.
+
+\section{Gestion de plusieurs points d'émission}
+Actuellement, la scène ne comporte qu'un noeud de particules. Augmenter ce
+nombre pourrait être intéressant autant d'un point de vue visuel qu'utilitaire.
+En effet, monter un système de particules possédant plusieurs sources ou types
+de particules permet de faire des choses bien plus aguichantes qu'un simple émetteur
+de particules. La raison pour laquelle nous n'avons pas implémenté cette fonction est
+que, derrière ses airs triviaux, elle nous pose un problème dans la gestion des shaders.
+En effet, créer un noeud deux fois recquiert d'utiliser le shader deux fois, et en faisant
+cela on crée le même shader plusieurs fois ce qui n'est pas possible dans notre cas.
+
+\section{Intégration à un environnement}
+La dernière amélioration notoire que nous avons pensé faire est d'intégrer nos systèmes
+de particules dans un environnement comportant d'autre objets 3D. On pourrait donner
+en exemple le fait d'avoir un modèle de torche et de placer un émetteur de particules
+ayant des textures se rapprochant de la fumée afin d'avoir l'impression que la torche fume.
+Cependant, il serait aussi possible de faire une intégration à un environnement bien plus poussée.
+En effet, en passant des objets 3D simples au vertex shader, il serait possible de faire
+intéragir nos particules et ces objets: des balles qui rebondissent au sol par exemple. 

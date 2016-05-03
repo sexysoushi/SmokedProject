@@ -53,7 +53,6 @@ TP01::initializeObjects()
 
     cout << "Shader color: ";
     //if (useShader( "color" ))
-
     if (useShader( "PerVertex" ))
     {
         cout << "Loaded!" << endl;

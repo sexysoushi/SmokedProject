@@ -12,6 +12,5 @@ INPUT(
 ./obj\RandomNumberGenerator.o
 ./obj\shape.o
 ./obj\particlesystem.o
-./obj\rubiks.o
 ./obj\moc_mainwindow.o
 );

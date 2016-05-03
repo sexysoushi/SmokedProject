@@ -36,8 +36,6 @@ HEADERS  += mainwindow.h \
     Common/Vectors.h \
     shape.h \
     particlesystem.h \
-    rubiks.h \
-    Common/Shapes/rubiks.h
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -52,9 +50,10 @@ SOURCES += main.cpp\
     Common/RandomNumberGenerator.cpp \
     shape.cpp \
     particlesystem.cpp \
-    Common/Shapes/rubiks.cpp
 
-unix:!macx|win32: LIBS += -L$$PWD/'../soil/Simple OpenGL Image Library/lib/' -lSOIL
 
-INCLUDEPATH += $$PWD/'../soil/Simple OpenGL Image Library'
-DEPENDPATH += $$PWD/'../soil/Simple OpenGL Image Library'
+DISTFILES += \
+    Shaders/color.fs \
+    Shaders/color.vs \
+    Shaders/PerVertex.fs \
+    Shaders/PerVertex.vs
