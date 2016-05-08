@@ -2,6 +2,9 @@
 #define PARTICLESYSTEM_H
 #include "Common/GlFramework.h"
 #include "Common/Object3D.h"
+#include <QTimer>
+#include <ctime>
+#include "Common/RandomNumberGenerator.h"
 
 struct Particle{
     vec3 position;
@@ -12,14 +15,26 @@ struct Particle{
     double age;
 };
 
-class ParticleSystem
+class ParticleSystem : public Object3D
 {
+
+public slots:
+    void addParticle();
+
 private:
+    vec3 orientation;
     double rate;
     double nbMax;
-    double maxTreeAlive;
-    Particle** TabParticle;
+    double maxTimeAlive;
+    std::vector<Particle*> TabParticle;
     bool isStarted;
+
+    time_t timer;
+    time_t currentTime;
+    void updateParticleTime();
+    void particleMotion();
+
+    RandomNumberGenerator randomG;
 
 public:
     ParticleSystem();
@@ -28,7 +43,10 @@ public:
     void start();
     void stop();
     void live();
-    void update(float fDeltaTime);
+
+protected:
+    void drawShape();
+
 };
 
 #endif // PARTICLESYSTEM_H

@@ -2,6 +2,7 @@
 
 
 #include "Shapes/Basis.h"
+#include "particlesystem.h"
 
 #include <iostream>
 
@@ -13,13 +14,13 @@ GLfloat angle2 = 20.0f;
 
 const GLfloat g_AngleSpeed = 10.0f;
 
-
+ParticleSystem* ps;
 Basis* g_Basis;
 
 GlFrame::GlFrame()
 {
     setWindowTitle(trUtf8("IN55-GlFrame"));
-
+    ps = new ParticleSystem();
     g_Basis = new Basis( 10.0 );
 }
 
@@ -27,6 +28,7 @@ GlFrame::GlFrame()
 GlFrame::~GlFrame()
 {
     delete g_Basis;
+    delete ps;
 }
 
 
@@ -70,8 +72,11 @@ GlFrame::render()
 		rotate( angle2, 1, 0, 0 );
         rotate( angle2, 0, 0, 1 );
         g_Basis->draw();
+//	popMatrix();
 
-	popMatrix();
+//    pushMatrix();
+        ps->draw();
+    popMatrix();
 }
 
 

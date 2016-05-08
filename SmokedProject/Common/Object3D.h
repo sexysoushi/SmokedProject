@@ -8,7 +8,7 @@
 class Object3D
 {
 
-private:
+protected:
     vec3   rotation; // rotation de la particule
     vec3   position; // position de la particule
     vec3   size; // taille de la particule

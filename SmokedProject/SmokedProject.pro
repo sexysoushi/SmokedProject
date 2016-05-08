@@ -12,10 +12,7 @@ TEMPLATE = app
 DEPENDPATH += SmokedProject
 INCLUDEPATH = Common/ "../glew-mingw\include"
 win32:LIBS += -L"../glew-mingw\lib" -lglew32
-unix
-{
-    LIBS += -lGL -lGLEW
-}
+
 
 DESTDIR = release
 OBJECTS_DIR = obj
@@ -31,8 +28,8 @@ HEADERS  += mainwindow.h \
     Common/RandomNumberGenerator.h \
     Common/Types.h \
     Common/Vectors.h \
-    particlesystem.h \
-    GlFrame.h
+    GlFrame.h \
+    particlesystem.h
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -42,8 +39,8 @@ SOURCES += main.cpp\
     Common/Object3D.cpp \
     Common/Shapes/Basis.cpp \
     Common/RandomNumberGenerator.cpp \
-    particlesystem.cpp \
-    GlFrame.cpp
+    GlFrame.cpp \
+    particlesystem.cpp
 
 
 DISTFILES += \

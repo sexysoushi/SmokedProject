@@ -7,7 +7,7 @@ INPUT(
 ./obj\Object3D.o
 ./obj\Basis.o
 ./obj\RandomNumberGenerator.o
-./obj\particlesystem.o
 ./obj\GlFrame.o
+./obj\particlesystem.o
 ./obj\moc_mainwindow.o
 );
