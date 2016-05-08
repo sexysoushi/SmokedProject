@@ -2,6 +2,8 @@
 
 
 #include "Shapes/Basis.h"
+#include "Shapes/Cubes.h"
+#include "Shapes/cube.h"
 #include "particlesystem.h"
 
 #include <iostream>
@@ -17,11 +19,17 @@ const GLfloat g_AngleSpeed = 10.0f;
 ParticleSystem* ps;
 Basis* g_Basis;
 
+
+
 GlFrame::GlFrame()
 {
     setWindowTitle(trUtf8("IN55-GlFrame"));
     ps = new ParticleSystem();
+    ps->start();
+
     g_Basis = new Basis( 10.0 );
+
+    //g_cube = new Cube(2.0);
 }
 
 
@@ -62,6 +70,8 @@ GlFrame::initializeObjects()
 void
 GlFrame::render()
 {
+    ps->live();
+
 	// Initialisation de la caméra
 	lookAt( 0, 5, 30, 0, 0, 0 );
 
@@ -72,11 +82,9 @@ GlFrame::render()
 		rotate( angle2, 1, 0, 0 );
         rotate( angle2, 0, 0, 1 );
         g_Basis->draw();
-//	popMatrix();
-
-//    pushMatrix();
         ps->draw();
     popMatrix();
+
 }
 
 

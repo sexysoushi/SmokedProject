@@ -9,20 +9,10 @@ class Object3D
 {
 
 protected:
-    vec3   rotation; // rotation de la particule
-    vec3   position; // position de la particule
-    vec3   size; // taille de la particule
-
-
 	public:
         static void setFramework( AbstractFramework* );
 
 	public:
-
-        void translate(vec3 t);
-        void rotate(vec3 r);
-        void setSize(vec3 s);
-
 		void draw();
 
 	protected:

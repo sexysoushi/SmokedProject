@@ -2,26 +2,24 @@
 #define PARTICLESYSTEM_H
 #include "Common/GlFramework.h"
 #include "Common/Object3D.h"
-#include <QTimer>
 #include <ctime>
 #include "Common/RandomNumberGenerator.h"
+#include "Shapes/Cubes.h"
+#include "Shapes/cube.h"
 
 struct Particle{
     vec3 position;
     vec3   velocity; // vitesse orientée sur un axe
     vec3   color;    // couleur de la particule
-    double       lifeTime; // durée de vie de la particule
-    double       size;     // taille de la particule
-    double age;
+    double lifeTime; // durée de vie de la particule
+    double size;     // taille de la particule
+    double startTime;
 };
 
 class ParticleSystem : public Object3D
 {
-
-public slots:
-    void addParticle();
-
 private:
+    vec3 position;
     vec3 orientation;
     double rate;
     double nbMax;
@@ -29,12 +27,17 @@ private:
     std::vector<Particle*> TabParticle;
     bool isStarted;
 
-    time_t timer;
-    time_t currentTime;
-    void updateParticleTime();
-    void particleMotion();
+    clock_t timer;
+    clock_t currentTime;
+
+
+    void updateParticleTime(Particle* particle);
+    void particleMotion(Particle* particle);
+    void addParticle();
+    void resetParticle(Particle* particle);
 
     RandomNumberGenerator randomG;
+    Cube* g_cube;
 
 public:
     ParticleSystem();

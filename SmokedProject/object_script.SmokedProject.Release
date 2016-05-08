@@ -9,5 +9,8 @@ INPUT(
 ./obj\RandomNumberGenerator.o
 ./obj\GlFrame.o
 ./obj\particlesystem.o
+./obj\Cubes.o
+./obj\Shape.o
+./obj\cube.o
 ./obj\moc_mainwindow.o
 );
