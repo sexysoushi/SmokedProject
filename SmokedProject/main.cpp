@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include "TP01.h"
+#include "GlFrame.h"
 
 int main(int argc, char *argv[])
 {
@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 //    MainWindow w;
 //    w.show();
 
-    TP01 win;
+    GlFrame win;
     win.show();
 
     return a.exec();
