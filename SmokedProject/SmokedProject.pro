@@ -12,7 +12,7 @@ TEMPLATE = app
 DEPENDPATH += SmokedProject
 INCLUDEPATH = Common/ "../glew-mingw\include"
 win32:LIBS += -L"../glew-mingw\lib" -lglew32
-
+unix:LIBS+= -lGL -lGLEW
 
 DESTDIR = release
 OBJECTS_DIR = obj
