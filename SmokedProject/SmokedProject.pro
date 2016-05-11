@@ -29,7 +29,10 @@ HEADERS  += mainwindow.h \
     Common/Types.h \
     Common/Vectors.h \
     GlFrame.h \
-    particlesystem.h
+    particlesystem.h \
+    Common/Shapes/Cubes.h \
+    Common/Shapes/Shape.h \
+    Common/Shapes/cube.h
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -40,7 +43,10 @@ SOURCES += main.cpp\
     Common/Shapes/Basis.cpp \
     Common/RandomNumberGenerator.cpp \
     GlFrame.cpp \
-    particlesystem.cpp
+    particlesystem.cpp \
+    Common/Shapes/Cubes.cpp \
+    Common/Shapes/Shape.cpp \
+    Common/Shapes/cube.cpp
 
 
 DISTFILES += \
