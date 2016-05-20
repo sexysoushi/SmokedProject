@@ -17,6 +17,6 @@ void main()
   vec3 np;
   np = position+velocity*time;
   np.y -= 0.5f*g*time*time;
-  gl_Position = MVP * vec4(np, 1.0f );
+  gl_Position = MVP * vec4(position, 1.0f );
   fColor = color;
 }

@@ -26,9 +26,10 @@ private:
     std::vector<Particle*> TabParticle;
     bool isStarted;
 
-    clock_t timer;
+    clock_t lastTrigger;
     clock_t currentTime;
     double timeSinceLastTrigger;
+    double timeSinceLastFrame;
 
 
     void updateParticleTime(Particle* particle);

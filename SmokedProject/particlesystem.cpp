@@ -6,7 +6,7 @@ ParticleSystem::ParticleSystem()
       nbMax(100.0),
       maxTimeAlive(1000.0),
       isStarted(false),
-      timer(clock()/(double)(CLOCKS_PER_SEC/1000)),
+      lastTrigger(clock()/(double)(CLOCKS_PER_SEC/1000)),
       currentTime(clock())
 {
     addParticle();
@@ -40,11 +40,12 @@ void ParticleSystem::live()
 {
     if(isStarted)
     {
+        timeSinceLastFrame = clock()/(double)(CLOCKS_PER_SEC/1000) - currentTime;
         currentTime = clock()/(double)(CLOCKS_PER_SEC/1000);
-        timeSinceLastTrigger = currentTime-timer;
+        timeSinceLastTrigger = currentTime-lastTrigger;
         if(timeSinceLastTrigger > rate)
         {
-            timer = clock()/(double)(CLOCKS_PER_SEC/1000);
+            lastTrigger = clock()/(double)(CLOCKS_PER_SEC/1000);
             addParticle();
         }
     }
@@ -103,19 +104,23 @@ void ParticleSystem::resetParticle(Particle* particle)
 void ParticleSystem::drawShape()
 {
     int t = glGetUniformLocation(m_Framework->getCurrentShaderId(), "time");
-    glUniform1f(t, );
+    glUniform1f(t, timeSinceLastFrame);
 
-    std::cout<<timeSinceLastTrigger<<std::endl;
+
+    GLint v = glGetAttribLocation( m_Framework->getCurrentShaderId(), "velocity" );
+    glEnableVertexAttribArray( v );
 
     for ( unsigned int i = 0; i < TabParticle.size(); ++i )
        {
            Particle* particle = TabParticle[i];
-           updateParticleTime( particle);
-           particleMotion(particle);
+           //updateParticleTime( particle);
+           //particleMotion(particle);
 
-           std::cout<<"particle "<<i+1<<"/"<<TabParticle.size()<<"\n";
+           glVertexAttribPointer( v, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), &(particle->velocity) );
+
+           //std::cout<<"particle "<<i+1<<"/"<<TabParticle.size()<<"\n";
            m_Framework->pushMatrix();
-           m_Framework->translate(particle->position.x, particle->position.y+i, particle->position.z);
+           m_Framework->translate(particle->position.x, particle->position.y, particle->position.z);
            g_cube->draw();
            m_Framework->popMatrix();
         }
