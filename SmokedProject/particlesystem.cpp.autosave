@@ -40,6 +40,7 @@ void ParticleSystem::live()
 {
     if(isStarted)
     {
+        timeSinceLastFrame = clock()/(double)(CLOCKS_PER_SEC/1000) - currentTime;
         currentTime = clock()/(double)(CLOCKS_PER_SEC/1000);
         timeSinceLastTrigger = currentTime-timer;
         if(timeSinceLastTrigger > rate)

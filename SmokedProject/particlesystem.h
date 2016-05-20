@@ -7,7 +7,7 @@
 #include "Shapes/cube.h"
 
 struct Particle{
-    vec3 position;
+    vec3   position;
     vec3   velocity; // vitesse orientée sur un axe
     vec3   color;    // couleur de la particule
     double lifeTime; // durée de vie de la particule
@@ -28,6 +28,7 @@ private:
 
     clock_t timer;
     clock_t currentTime;
+    double timeSinceLastTrigger;
 
 
     void updateParticleTime(Particle* particle);
