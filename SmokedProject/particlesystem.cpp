@@ -19,7 +19,7 @@ ParticleSystem::ParticleSystem()
     position.y = 0;
     position.z = 0;
 
-    g_cube = new Cube(2.0);
+    g_cube = new Cube(1.0);
 }
 
 ParticleSystem::~ParticleSystem(){}
@@ -54,14 +54,14 @@ void ParticleSystem::live()
 
 void ParticleSystem::particleMotion(Particle* particle)
 {
-   particle->position.x += randomG.getRandomNumber(2)*(time(NULL) - currentTime);
-   particle->position.z += randomG.getRandomNumber(2)*(time(NULL) - currentTime);
-   particle->position.y += 0.1*(time(NULL) - currentTime);
+//   particle->position.x += randomG.getRandomNumber(2)*(time(NULL) - currentTime);
+//   particle->position.z += randomG.getRandomNumber(2)*(time(NULL) - currentTime);
+//   particle->position.y += 0.1*(time(NULL) - currentTime);
 }
 
 void ParticleSystem::updateParticleTime(Particle* particle)
 {
-//   particle->age = particle->age + (time(NULL) - currentTime);
+   //particle->age = particle->age + (time(NULL) - currentTime);
 //   std::cout<<"age particle "<<particle->age<<"\n";
 //   if(particle->age > maxTimeAlive)
 //   {
@@ -111,22 +111,10 @@ void ParticleSystem::drawShape()
            particleMotion(particle);
 
            std::cout<<"particle "<<i+1<<"/"<<TabParticle.size()<<"\n";
-
-           //m_Framework->translate(particle->position.x, particle->position.y, particle->position.z);
-           //m_Framework->pushMatrix();
-//           glBegin(GL_POINTS);
-//           glVertex3f(particle->position.x, particle->position.y, particle->position.z);
-//           glEnd();
-//           glBegin(GL_QUADS);
-//           glColor3f(1, 1, 1);
-//           glVertex3f(particle->size/2, particle->size/2, 0);
-//           glVertex3f(-particle->size/2, particle->size/2, 0);
-//           glVertex3f(-particle->size/2, -particle->size/2, 0);
-//           glVertex3f(particle->size/2, -particle->size/2, 0);
-//           glEnd();
-
+           m_Framework->pushMatrix();
+           m_Framework->translate(particle->position.x, particle->position.y+i, particle->position.z);
            g_cube->draw();
-           //m_Framework->popMatrix();
+           m_Framework->popMatrix();
         }
 }
 

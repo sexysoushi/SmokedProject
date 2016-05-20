@@ -22,7 +22,7 @@ Basis* g_Basis;
 
 GlFrame::GlFrame()
 {
-    setWindowTitle(trUtf8("IN55-GlFrame"));
+    setWindowTitle(trUtf8("Particle System - IN55 projet P16"));
     ps = new ParticleSystem();
     ps->start();
 
