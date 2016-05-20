@@ -112,7 +112,7 @@ void ParticleSystem::drawShape()
 
            std::cout<<"particle "<<i+1<<"/"<<TabParticle.size()<<"\n";
 
-           m_Framework->translate(particle->position.x, particle->position.y, particle->position.z);
+           //m_Framework->translate(particle->position.x, particle->position.y, particle->position.z);
            //m_Framework->pushMatrix();
 //           glBegin(GL_POINTS);
 //           glVertex3f(particle->position.x, particle->position.y, particle->position.z);

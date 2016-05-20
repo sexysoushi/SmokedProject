@@ -30,9 +30,9 @@ HEADERS  += mainwindow.h \
     Common/Vectors.h \
     GlFrame.h \
     particlesystem.h \
-    Common/Shapes/Cubes.h \
-    Common/Shapes/Shape.h \
-    Common/Shapes/cube.h
+    Common/Shapes/cube.h \
+    Quaternion.h \
+    Camera.h
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -44,9 +44,9 @@ SOURCES += main.cpp\
     Common/RandomNumberGenerator.cpp \
     GlFrame.cpp \
     particlesystem.cpp \
-    Common/Shapes/Cubes.cpp \
-    Common/Shapes/Shape.cpp \
-    Common/Shapes/cube.cpp
+    Common/Shapes/cube.cpp \
+    Quaternion.cpp \
+    Camera.cpp
 
 
 DISTFILES += \
