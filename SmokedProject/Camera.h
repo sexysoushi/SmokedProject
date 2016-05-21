@@ -7,13 +7,21 @@ class Camera
 {
 
 private:
-    vec3 m_Position;
+    Vec3 m_position;
     Quaternion m_Orientation;
-    GLMatrix m_ViewMAtrix;
-    GLMatrix m_Projection;
+    GLMatrix m_ViewMatrix;
+    GLMatrix m_ProjectionMatrix;
+
+    float _aspectRatio;
+    float _nearPlane;
+    float _farPlane;
+    float _fieldOfView;
 
 public:
     Camera();
+    Camera(float posX, float posY, float posZ);
+    Camera(float posX, float posY, float posZ, float ar, float np, float fp, float fov);
+    ~Camera();
 
     void translate(float x, float y, float z);
     void translateX(float shift);
@@ -30,7 +38,7 @@ public:
     const GLMatrix& getProjectionMatrix();
 
 protected:
-    void buildViexMatrix();
+    void buildViewMatrix();
     void buildProjectionMatrix();
 };
 

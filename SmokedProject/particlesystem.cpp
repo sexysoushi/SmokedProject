@@ -103,26 +103,36 @@ void ParticleSystem::resetParticle(Particle* particle)
 
 void ParticleSystem::drawShape()
 {
-    int t = glGetUniformLocation(m_Framework->getCurrentShaderId(), "time");
+    double t = glGetUniformLocation(m_Framework->getCurrentShaderId(), "time");
     glUniform1f(t, timeSinceLastFrame);
 
+    GLint p = glGetAttribLocation( m_Framework->getCurrentShaderId(), "position" );
+    //glEnableVertexAttribArray( p );
 
     GLint v = glGetAttribLocation( m_Framework->getCurrentShaderId(), "velocity" );
-    glEnableVertexAttribArray( v );
+    //glEnableVertexAttribArray( v );
+
+
 
     for ( unsigned int i = 0; i < TabParticle.size(); ++i )
        {
+        glEnableVertexAttribArray( p );
+        glEnableVertexAttribArray( v );
            Particle* particle = TabParticle[i];
            //updateParticleTime( particle);
            //particleMotion(particle);
-
+           glVertexAttribPointer( p, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), &(particle->position) );
            glVertexAttribPointer( v, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), &(particle->velocity) );
 
-           //std::cout<<"particle "<<i+1<<"/"<<TabParticle.size()<<"\n";
+           std::cout<<"particle "<<i+1<<"/"<<TabParticle.size()<<"\n";
            m_Framework->pushMatrix();
            m_Framework->translate(particle->position.x, particle->position.y, particle->position.z);
            g_cube->draw();
            m_Framework->popMatrix();
+
+           glDisableVertexAttribArray( p );
+           glDisableVertexAttribArray( v );
         }
+
 }
 

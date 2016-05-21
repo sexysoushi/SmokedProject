@@ -32,7 +32,8 @@ HEADERS  += mainwindow.h \
     particlesystem.h \
     Common/Shapes/cube.h \
     Quaternion.h \
-    Camera.h
+    Camera.h \
+    Cameratest.h
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -46,7 +47,8 @@ SOURCES += main.cpp\
     particlesystem.cpp \
     Common/Shapes/cube.cpp \
     Quaternion.cpp \
-    Camera.cpp
+    Camera.cpp \
+    Cameratest.cpp
 
 
 DISTFILES += \
