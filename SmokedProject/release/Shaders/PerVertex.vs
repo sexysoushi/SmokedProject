@@ -21,5 +21,7 @@ void main()
   np.y -= 0.0000001*g*age*age;
   gl_Position = MVP * vec4(np, 1.0f );
   gl_PointSize = 4 + (200 - age)/1000;
+
   fColor = color;
+  fColor.x = (1500-age)/1500;
 }

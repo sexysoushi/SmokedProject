@@ -137,8 +137,8 @@ vec3 ParticleSystem::randomVector()
     }
 
     // rotation <2.PI autour de y
-    // float disAngle = randomG.getRandomNumber(2 * M_PI);
-    disAngle += 0.15;
+     float disAngle = randomG.getRandomNumber(2 * M_PI);
+    //disAngle += 0.15;
     v.x = v.z * std::sin(disAngle) + v.x * std::cos(disAngle);
     v.z = v.z * std::cos(disAngle) - v.x * std::sin(disAngle) ;
 
