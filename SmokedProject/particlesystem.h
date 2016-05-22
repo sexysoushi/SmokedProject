@@ -8,14 +8,16 @@
 #include <ctime>
 #include <chrono>
 #include <iostream>
+#include <deque>
+
+typedef std::chrono::steady_clock Clock;
 
 struct Particle{
     vec3   position;
     vec3   velocity; // vitesse orientée sur un axe
-    vec3   color;    // couleur de la particule
-    double lifeTime; // durée de vie de la particule
-    double size;     // taille de la particule
-    double startTime;
+    //vec3   color;    // couleur de la particule
+    //double size;     // taille de la particule
+    Clock::time_point startTime;
 };
 
 class ParticleSystem : public Object3D
@@ -23,31 +25,35 @@ class ParticleSystem : public Object3D
 private:
     vec3 position;
     vec3 orientation;
-    double rate;
-    double nbMax;
-    double maxTimeAlive;
-    std::vector<Particle*> TabParticle;
+    float rate;
+    float nbMax;
+    float maxTimeAlive;
+    float spread;
     bool isStarted;
+
+    std::deque<Particle*> TabParticle;
 
     float* positions;
     float* velocities;
+    float* ages;
 
-    clock_t first;
-    clock_t lastTrigger;
-    clock_t currentTime;
-    double timeSinceLastTrigger;
-    double timeSinceLastFrame;
+    Clock::time_point first = std::chrono::steady_clock::now();
+    Clock::time_point lastTrigger = first;
+    Clock::time_point currentTime = first;
+    float timeSinceLastTrigger;
+    float timeSinceLastFrame;
 
+    RandomNumberGenerator randomG;
 
-    void updateParticleTime(Particle* particle);
     void particleMotion(Particle* particle);
     void addParticle();
     void resetParticle(Particle* particle);
 
-    RandomNumberGenerator randomG;
-    //Cube* g_cube;
-
     void buildArrays();
+    vec3 randomVector();
+
+    float timeInterval(Clock::time_point start, Clock::time_point end);
+
 
 public:
     ParticleSystem();
@@ -55,7 +61,8 @@ public:
 
     void start();
     void stop();
-    void live();
+
+    void updateTime();
 
 protected:
     void drawShape();

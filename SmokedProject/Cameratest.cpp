@@ -69,11 +69,9 @@ Cameratest::initializeObjects()
 void
 Cameratest::render()
 {
-    ps->live();
-
     // Initialisation de la caméra
     lookAt( 0, 5, 30, 0, 0, 0 );
-
+    ps->updateTime();
 
     // Rendu des objets
     pushMatrix();

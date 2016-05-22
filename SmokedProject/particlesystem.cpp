@@ -1,16 +1,16 @@
 #include "particlesystem.h"
 
 ParticleSystem::ParticleSystem()
-    : rate(0.1),
-      nbMax(100.0),
+    : rate(200),
+      nbMax(1000.0),
       maxTimeAlive(1000.0),
       isStarted(false),
-      lastTrigger(clock()/(double)(CLOCKS_PER_SEC/1000)),
-      currentTime(clock())
+      spread(45),
+      positions(NULL),
+      velocities(NULL),
+      ages(NULL)
 {
     addParticle();
-
-    first = clock()/(double)(CLOCKS_PER_SEC/1000);
 
     orientation.x = 0;
     orientation.y = 1;
@@ -20,6 +20,7 @@ ParticleSystem::ParticleSystem()
     position.y = 0;
     position.z = 0;
 
+    randomG.initSeed(clock());
     //g_cube = new Cube(1.0);
 }
 
@@ -36,22 +37,31 @@ void ParticleSystem::stop()
     isStarted = false;
 }
 
+float ParticleSystem::timeInterval(Clock::time_point start, Clock::time_point end){
+    return std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+}
 
-void ParticleSystem::live()
+void ParticleSystem::updateTime()
 {
     if(isStarted)
     {
-        timeSinceLastFrame = (clock() - currentTime)/(double)(CLOCKS_PER_SEC/1000);
-        currentTime = clock();
-        timeSinceLastTrigger = (currentTime-lastTrigger)/(double)(CLOCKS_PER_SEC/1000);
+        timeSinceLastFrame = timeInterval(currentTime, std::chrono::steady_clock::now());
+
+        currentTime = Clock::now();
+        timeSinceLastTrigger = timeInterval(lastTrigger, currentTime);
 
         //std::cout<<timeSinceLastTrigger<<std::endl;
-        std::cout<<clock()<<std::endl;
 
-        if(timeSinceLastTrigger > rate)
+        int nb = timeSinceLastTrigger / (1000/rate);
+
+        if(nb >= 1)
         {
-            lastTrigger = clock();
-            addParticle();
+            lastTrigger = currentTime;
+            //std::cout<<timeSinceLastTrigger<<std::endl;
+            while(nb >= 1){
+                addParticle();
+                nb--;
+            }
         }
     }
 
@@ -68,67 +78,77 @@ void ParticleSystem::particleMotion(Particle* particle)
 
 void ParticleSystem::addParticle()
 {
-    if(TabParticle.size() <= nbMax)
-    {
-        Particle* particle= new Particle();
-        particle->position = position;
-        particle->lifeTime = maxTimeAlive;
-        particle->velocity = orientation;
-        particle->velocity.x += 0.3;
-        particle->color.x = 1.0;
-        particle->color.y = 1.0;
-        particle->color.z = 1.0;
-        particle->size = 6;
-        TabParticle.push_back(particle);
+    Particle* particle;
+    if(TabParticle.size() >= nbMax){
+        TabParticle.pop_front();
     }
 
-}
-
-void ParticleSystem::resetParticle(Particle* particle)
-{
+    particle = new Particle();
     particle->position = position;
-    //particle->age = 0;
-    particle->lifeTime = maxTimeAlive;
-    particle->velocity = orientation;
-    particle->color.x = 1.0;
-    particle->color.y = 1.0;
-    particle->color.z = 1.0;
-    particle->size = 6;
+    particle->velocity = randomVector();
+    particle->startTime = Clock::now();
+
+    TabParticle.push_back(particle);
 }
 
 void ParticleSystem::buildArrays(){
-    //if(positions != NULL) delete positions;
+    if(positions != NULL) delete positions;
     positions = new float[TabParticle.size()*3];
 
-    //if(velocities != NULL) delete velocities;
+    if(velocities != NULL) delete velocities;
     velocities = new float[TabParticle.size()*3];
+
+    if(ages != NULL) delete ages;
+    ages = new float[TabParticle.size()];
 
     for(int i=0; i<TabParticle.size(); i++){
         Particle* p = TabParticle[i];
 
-        particleMotion(p);
+        //particleMotion(p);
 
         positions[3*i] = p->position.x;
         positions[3*i+1] = p->position.y;
         positions[3*i+2] = p->position.z;
 
-        //std::cout<<positions[3*i]<<" "<<positions[3*i+1]<<" "<<positions[3*i+2]<<std::endl;
-
         velocities[3*i] = p->velocity.x;
         velocities[3*i+1] = p->velocity.y;
         velocities[3*i+2] = p->velocity.z;
+
+        ages[i] = timeInterval(p->startTime, Clock::now());
+
+        //std::cout<<velocities[3*i]<<" "<<velocities[3*i+1]<<" "<<velocities[3*i+2]<<std::endl;
+        std::cout << i << " : " << ages[i] << std::endl;
     }
+}
+
+vec3 ParticleSystem::randomVector()
+{
+    vec3 v;
+    v.x = 0;
+    v.y = 1;
+    v.z = 0;
+
+    // rotation du vecteur jusqu'au spread max (selon l'axe z arbitraire)
+    float rAngle = M_PI * spread / 180.0f;
+    v.x = v.y * std::sin(rAngle);
+    v.y = v.y * std::cos(rAngle);
+
+    // rotation <2.PI autour de y
+    float disAngle = randomG.getRandomNumber(2 * M_PI);
+    v.x = v.x * std::cos(disAngle);
+    v.z = -v.x * std::sin(disAngle);
+
+    return v;
 }
 
 
 void ParticleSystem::drawShape()
 {
     //std::cout<<TabParticle.size()<<std::endl;
-
     buildArrays();
 
     int t = glGetUniformLocation(m_Framework->getCurrentShaderId(), "time");
-    glUniform1d(t, timeSinceLastFrame);
+    glUniform1f(t, timeInterval(first, Clock::now()));
 
     GLint p = glGetAttribLocation( m_Framework->getCurrentShaderId(), "position" );
     glEnableVertexAttribArray( p );
@@ -136,12 +156,17 @@ void ParticleSystem::drawShape()
     GLint v = glGetAttribLocation( m_Framework->getCurrentShaderId(), "velocity" );
     glEnableVertexAttribArray( v );
 
+    GLint a = glGetAttribLocation( m_Framework->getCurrentShaderId(), "age" );
+    glEnableVertexAttribArray( a );
+
     glVertexAttribPointer( p, 3, GL_FLOAT, GL_FALSE, 0, positions );
     glVertexAttribPointer( v, 3, GL_FLOAT, GL_FALSE, 0, velocities );
+    glVertexAttribPointer( a, 1, GL_FLOAT, GL_FALSE, 0, ages );
 
     glDrawArrays(GL_POINTS,0,TabParticle.size());
 
     glDisableVertexAttribArray( v );
     glDisableVertexAttribArray( p );
+    glDisableVertexAttribArray( a );
 }
 
