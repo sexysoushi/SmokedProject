@@ -17,7 +17,6 @@ void main()
   vec3 np;
   np = position+velocity*time;
   np.y -= 10*g*time*time;
-  np.x += 5*time;
   gl_Position = MVP * vec4(np, 1.0f );
   gl_PointSize = 4.0f;
   fColor = color;

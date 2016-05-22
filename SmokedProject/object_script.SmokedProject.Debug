@@ -12,5 +12,6 @@ INPUT(
 ./obj\cube.o
 ./obj\Quaternion.o
 ./obj\Camera.o
+./obj\Cameratest.o
 ./obj\moc_mainwindow.o
 );

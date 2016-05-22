@@ -1,6 +1,7 @@
-#include "mainwindow.h"
 #include <QApplication>
-#include "GlFrame.h"
+//#include "GlFrame.h"
+
+#include "Cameratest.h"
 
 int main(int argc, char *argv[])
 {
@@ -8,7 +9,10 @@ int main(int argc, char *argv[])
 //    MainWindow w;
 //    w.show();
 
-    GlFrame win;
+//    GlFrame win;
+//    win.show();
+
+    Cameratest win;
     win.show();
 
     return a.exec();

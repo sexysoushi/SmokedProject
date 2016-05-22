@@ -17,7 +17,7 @@ unix:LIBS+= -lGL -lGLEW
 DESTDIR = release
 OBJECTS_DIR = obj
 
-HEADERS  += mainwindow.h \
+HEADERS  += \
     Common/GlFramework.h \
     Common/GlWindow.h \
     Common/LF_String.h \
@@ -32,10 +32,10 @@ HEADERS  += mainwindow.h \
     particlesystem.h \
     Common/Shapes/cube.h \
     Quaternion.h \
-    Camera.h
+    Camera.h \
+    Cameratest.h
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
     Common/GlFramework.cpp \
     Common/GlWindow.cpp \
     Common/LF_String.cpp \
@@ -46,7 +46,8 @@ SOURCES += main.cpp\
     particlesystem.cpp \
     Common/Shapes/cube.cpp \
     Quaternion.cpp \
-    Camera.cpp
+    Camera.cpp \
+    Cameratest.cpp
 
 
 DISTFILES += \
@@ -54,3 +55,9 @@ DISTFILES += \
     Shaders/color.vs \
     Shaders/PerVertex.fs \
     Shaders/PerVertex.vs
+
+OTHER_FILES += \
+    release/Shaders/PerVertex.vs \
+    release/Shaders/PerVertex.fs \
+    release/Shaders/color.vs \
+    release/Shaders/color.fs
