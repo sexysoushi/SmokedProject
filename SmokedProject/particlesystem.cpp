@@ -2,7 +2,7 @@
 #include <iostream>
 
 ParticleSystem::ParticleSystem()
-    : rate(20.0),
+    : rate(0.1),
       nbMax(100.0),
       maxTimeAlive(1000.0),
       isStarted(false),
@@ -10,6 +10,8 @@ ParticleSystem::ParticleSystem()
       currentTime(clock())
 {
     addParticle();
+
+    first = clock()/(double)(CLOCKS_PER_SEC/1000);
 
     orientation.x = 0;
     orientation.y = 1;
@@ -40,12 +42,16 @@ void ParticleSystem::live()
 {
     if(isStarted)
     {
-        timeSinceLastFrame = clock()/(double)(CLOCKS_PER_SEC/1000) - currentTime;
-        currentTime = clock()/(double)(CLOCKS_PER_SEC/1000);
-        timeSinceLastTrigger = currentTime-lastTrigger;
+        timeSinceLastFrame = (clock() - currentTime)/(double)(CLOCKS_PER_SEC/1000);
+        currentTime = clock();
+        timeSinceLastTrigger = (currentTime-lastTrigger)/(double)(CLOCKS_PER_SEC/1000);
+
+        //std::cout<<timeSinceLastTrigger<<std::endl;
+        std::cout<<clock()<<std::endl;
+
         if(timeSinceLastTrigger > rate)
         {
-            lastTrigger = clock()/(double)(CLOCKS_PER_SEC/1000);
+            lastTrigger = clock();
             addParticle();
         }
     }
@@ -57,18 +63,9 @@ void ParticleSystem::particleMotion(Particle* particle)
 //   particle->position.x += randomG.getRandomNumber(2)*(time(NULL) - currentTime);
 //   particle->position.z += randomG.getRandomNumber(2)*(time(NULL) - currentTime);
 //   particle->position.y += 0.1*(time(NULL) - currentTime);
+    particle->position.y += 0.1;
 }
 
-void ParticleSystem::updateParticleTime(Particle* particle)
-{
-   //particle->age = particle->age + (time(NULL) - currentTime);
-//   std::cout<<"age particle "<<particle->age<<"\n";
-//   if(particle->age > maxTimeAlive)
-//   {
-//        resetParticle(particle);
-//   }
-
-}
 
 void ParticleSystem::addParticle()
 {
@@ -76,7 +73,6 @@ void ParticleSystem::addParticle()
     {
         Particle* particle= new Particle();
         particle->position = position;
-        //particle->age = 0;
         particle->lifeTime = maxTimeAlive;
         particle->velocity = orientation;
         particle->color.x = 1.0;
@@ -100,29 +96,54 @@ void ParticleSystem::resetParticle(Particle* particle)
     particle->size = 6;
 }
 
+void ParticleSystem::buildArrays(){
+    //if(positions != NULL) delete positions;
+    positions = new float[TabParticle.size()*3];
+
+    //if(velocities != NULL) delete velocities;
+    velocities = new float[TabParticle.size()*3];
+
+    for(int i=0; i<TabParticle.size(); i++){
+        Particle* p = TabParticle[i];
+
+        particleMotion(p);
+
+        positions[3*i] = p->position.x;
+        positions[3*i+1] = p->position.y;
+        positions[3*i+2] = p->position.z;
+
+        //std::cout<<positions[3*i]<<" "<<positions[3*i+1]<<" "<<positions[3*i+2]<<std::endl;
+
+        velocities[3*i] = p->velocity.x;
+        velocities[3*i+1] = p->velocity.y;
+        velocities[3*i+2] = p->velocity.z;
+    }
+}
+
 
 void ParticleSystem::drawShape()
 {
-    int t = glGetUniformLocation(m_Framework->getCurrentShaderId(), "time");
-    glUniform1f(t, timeSinceLastFrame);
+    //std::cout<<TabParticle.size()<<std::endl;
 
+    buildArrays();
+
+    glEnable(GL_PROGRAM_POINT_SIZE);
+
+    int t = glGetUniformLocation(m_Framework->getCurrentShaderId(), "time");
+    glUniform1d(t, timeSinceLastFrame);
+
+    GLint p = glGetAttribLocation( m_Framework->getCurrentShaderId(), "position" );
+    glEnableVertexAttribArray( p );
 
     GLint v = glGetAttribLocation( m_Framework->getCurrentShaderId(), "velocity" );
     glEnableVertexAttribArray( v );
 
-    for ( unsigned int i = 0; i < TabParticle.size(); ++i )
-       {
-           Particle* particle = TabParticle[i];
-           //updateParticleTime( particle);
-           //particleMotion(particle);
+    glVertexAttribPointer( p, 3, GL_FLOAT, GL_FALSE, 0, positions );
+    glVertexAttribPointer( v, 3, GL_FLOAT, GL_FALSE, 0, velocities );
 
-           glVertexAttribPointer( v, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), &(particle->velocity) );
+    glDrawArrays(GL_POINTS,0,TabParticle.size());
 
-           //std::cout<<"particle "<<i+1<<"/"<<TabParticle.size()<<"\n";
-           m_Framework->pushMatrix();
-           m_Framework->translate(particle->position.x, particle->position.y, particle->position.z);
-           g_cube->draw();
-           m_Framework->popMatrix();
-        }
+    glDisableVertexAttribArray( v );
+    glDisableVertexAttribArray( p );
 }
 

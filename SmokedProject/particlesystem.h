@@ -3,6 +3,7 @@
 #include "Common/GlFramework.h"
 #include "Common/Object3D.h"
 #include <ctime>
+//#include <chrono>
 #include "Common/RandomNumberGenerator.h"
 #include "Shapes/cube.h"
 
@@ -26,6 +27,10 @@ private:
     std::vector<Particle*> TabParticle;
     bool isStarted;
 
+    float* positions;
+    float* velocities;
+
+    clock_t first;
     clock_t lastTrigger;
     clock_t currentTime;
     double timeSinceLastTrigger;
@@ -39,6 +44,8 @@ private:
 
     RandomNumberGenerator randomG;
     Cube* g_cube;
+
+    void buildArrays();
 
 public:
     ParticleSystem();

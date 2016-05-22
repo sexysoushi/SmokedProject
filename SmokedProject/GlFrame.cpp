@@ -80,7 +80,7 @@ GlFrame::render()
 		rotate( angle1, 0, 1, 0 );
 		rotate( angle2, 1, 0, 0 );
         rotate( angle2, 0, 0, 1 );
-        g_Basis->draw();
+        //g_Basis->draw();
         ps->draw();
     popMatrix();
 
