@@ -31,6 +31,8 @@ private:
     float spread;
     bool isStarted;
 
+    float disAngle;
+
     std::deque<Particle*> TabParticle;
 
     float* positions;

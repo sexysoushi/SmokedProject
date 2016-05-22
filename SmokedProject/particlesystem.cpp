@@ -5,7 +5,7 @@ ParticleSystem::ParticleSystem()
       nbMax(1000.0),
       maxTimeAlive(1000.0),
       isStarted(false),
-      spread(45),
+      spread(20),
       positions(NULL),
       velocities(NULL),
       ages(NULL)
@@ -19,6 +19,8 @@ ParticleSystem::ParticleSystem()
     position.x = 0;
     position.y = 0;
     position.z = 0;
+
+    disAngle=0;
 
     randomG.initSeed(clock());
     //g_cube = new Cube(1.0);
@@ -66,15 +68,6 @@ void ParticleSystem::updateTime()
     }
 
 }
-
-void ParticleSystem::particleMotion(Particle* particle)
-{
-//   particle->position.x += randomG.getRandomNumber(2)*(time(NULL) - currentTime);
-//   particle->position.z += randomG.getRandomNumber(2)*(time(NULL) - currentTime);
-//   particle->position.y += 0.1*(time(NULL) - currentTime);
-    particle->position.y += 0.1;
-}
-
 
 void ParticleSystem::addParticle()
 {
@@ -128,15 +121,26 @@ vec3 ParticleSystem::randomVector()
     v.y = 1;
     v.z = 0;
 
-    // rotation du vecteur jusqu'au spread max (selon l'axe z arbitraire)
     float rAngle = M_PI * spread / 180.0f;
-    v.x = v.y * std::sin(rAngle);
-    v.y = v.y * std::cos(rAngle);
+
+    if(randomG.getFloat32() > 1.5f)
+    {
+        // rotation du vecteur jusqu'au spread max (selon l'axe z arbitraire)
+        v.x = -v.y * std::sin(rAngle);
+        v.y = v.y * std::cos(rAngle);
+    }
+    else
+    {
+        // rotation du vecteur jusqu'au spread max (selon l'axe x arbitraire)
+        v.y = v.y * std::cos(rAngle);
+        v.z = v.y * std::sin(rAngle);
+    }
 
     // rotation <2.PI autour de y
-    float disAngle = randomG.getRandomNumber(2 * M_PI);
-    v.x = v.x * std::cos(disAngle);
-    v.z = -v.x * std::sin(disAngle);
+    // float disAngle = randomG.getRandomNumber(2 * M_PI);
+    disAngle += 0.15;
+    v.x = v.z * std::sin(disAngle) + v.x * std::cos(disAngle);
+    v.z = v.z * std::cos(disAngle) - v.x * std::sin(disAngle) ;
 
     return v;
 }
