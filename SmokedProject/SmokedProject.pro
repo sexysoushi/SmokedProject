@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-CONFIG += console release
+CONFIG += console release c++11
 QT += core gui opengl
 TARGET = SmokedProject
 TEMPLATE = app
@@ -57,7 +57,7 @@ DISTFILES += \
     Shaders/PerVertex.vs
 
 OTHER_FILES += \
-    release/Shaders/PerVertex.vs \
-    release/Shaders/PerVertex.fs \
     release/Shaders/color.vs \
-    release/Shaders/color.fs
+    release/Shaders/color.fs \
+    release/Shaders/PerVertex.fs \
+    release/Shaders/PerVertex.vs

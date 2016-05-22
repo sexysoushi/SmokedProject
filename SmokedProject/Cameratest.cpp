@@ -4,7 +4,6 @@
 
 
 #include "Shapes/Basis.h"
-#include "Shapes/cube.h"
 #include "particlesystem.h"
 
 #include <iostream>
@@ -29,8 +28,6 @@ Cameratest::Cameratest()
     ps->start();
 
     g_Basis = new Basis( 10.0 );
-
-    //g_cube = new Cube(2.0);
 }
 
 
@@ -47,6 +44,7 @@ Cameratest::initializeObjects()
     // Fond gris
     glClearColor( 0.2f, 0.2f, 0.2f, 1.0f );
     glEnable( GL_DEPTH_TEST );
+    glEnable( GL_PROGRAM_POINT_SIZE );
 
     // Chargement des shaders
     //createShader( "Shaders/color" );

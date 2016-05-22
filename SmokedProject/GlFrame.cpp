@@ -42,11 +42,11 @@
 //bool
 //GlFrame::initializeObjects()
 //{
-//	// Fond gris
-//	glClearColor( 0.2f, 0.2f, 0.2f, 1.0f );
-//	glEnable( GL_DEPTH_TEST );
+//    // Fond gris
+//    glClearColor( 0.2f, 0.2f, 0.2f, 1.0f );
+//    glEnable( GL_DEPTH_TEST );
 
-//	// Chargement des shaders
+//    // Chargement des shaders
 //    //createShader( "Shaders/color" );
 
 //    createShader( "Shaders/PerVertex" );
@@ -62,7 +62,7 @@
 //        cout << "NOT Loaded!" << endl;
 //    }
 
-//	return true;
+//    return true;
 //}
 
 
@@ -71,14 +71,14 @@
 //{
 //    ps->live();
 
-//	// Initialisation de la caméra
-//	lookAt( 0, 5, 30, 0, 0, 0 );
+//    // Initialisation de la caméra
+//    lookAt( 0, 5, 30, 0, 0, 0 );
 
 
-//	// Rendu des objets
+//    // Rendu des objets
 //    pushMatrix();
-//		rotate( angle1, 0, 1, 0 );
-//		rotate( angle2, 1, 0, 0 );
+//        rotate( angle1, 0, 1, 0 );
+//        rotate( angle2, 1, 0, 0 );
 //        rotate( angle2, 0, 0, 1 );
 //        g_Basis->draw();
 //        ps->draw();
@@ -90,30 +90,30 @@
 //void
 //GlFrame::keyPressEvent( QKeyEvent* event )
 //{
-//	switch( event->key())
-//	{
-//		case Qt::Key_Escape:
-//			close();
-//			break;
+//    switch( event->key())
+//    {
+//        case Qt::Key_Escape:
+//            close();
+//            break;
 
-//		case Qt::Key_Left:
-//			angle1 -= g_AngleSpeed;
-//			break;
+//        case Qt::Key_Left:
+//            angle1 -= g_AngleSpeed;
+//            break;
 
-//		case Qt::Key_Right:
-//			angle1 += g_AngleSpeed;
-//			break;
+//        case Qt::Key_Right:
+//            angle1 += g_AngleSpeed;
+//            break;
 
-//		case Qt::Key_Up:
-//			angle2 -= g_AngleSpeed;
-//			break;
+//        case Qt::Key_Up:
+//            angle2 -= g_AngleSpeed;
+//            break;
 
-//		case Qt::Key_Down:
-//			angle2 += g_AngleSpeed;
-//			break;
+//        case Qt::Key_Down:
+//            angle2 += g_AngleSpeed;
+//            break;
 
-//		case Qt::Key_R:
-//			angle1 = angle2 = 0.0f;
-//			break;
-//	}
+//        case Qt::Key_R:
+//            angle1 = angle2 = 0.0f;
+//            break;
+//    }
 //}

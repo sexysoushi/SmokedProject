@@ -1,5 +1,4 @@
 #include "particlesystem.h"
-#include <iostream>
 
 ParticleSystem::ParticleSystem()
     : rate(0.1),
@@ -21,7 +20,7 @@ ParticleSystem::ParticleSystem()
     position.y = 0;
     position.z = 0;
 
-    g_cube = new Cube(1.0);
+    //g_cube = new Cube(1.0);
 }
 
 ParticleSystem::~ParticleSystem(){}
@@ -75,6 +74,7 @@ void ParticleSystem::addParticle()
         particle->position = position;
         particle->lifeTime = maxTimeAlive;
         particle->velocity = orientation;
+        particle->velocity.x += 0.3;
         particle->color.x = 1.0;
         particle->color.y = 1.0;
         particle->color.z = 1.0;
@@ -126,8 +126,6 @@ void ParticleSystem::drawShape()
     //std::cout<<TabParticle.size()<<std::endl;
 
     buildArrays();
-
-    glEnable(GL_PROGRAM_POINT_SIZE);
 
     int t = glGetUniformLocation(m_Framework->getCurrentShaderId(), "time");
     glUniform1d(t, timeSinceLastFrame);

@@ -2,10 +2,12 @@
 #define PARTICLESYSTEM_H
 #include "Common/GlFramework.h"
 #include "Common/Object3D.h"
-#include <ctime>
-//#include <chrono>
 #include "Common/RandomNumberGenerator.h"
-#include "Shapes/cube.h"
+//#include "Shapes/cube.h"
+
+#include <ctime>
+#include <chrono>
+#include <iostream>
 
 struct Particle{
     vec3   position;
@@ -43,7 +45,7 @@ private:
     void resetParticle(Particle* particle);
 
     RandomNumberGenerator randomG;
-    Cube* g_cube;
+    //Cube* g_cube;
 
     void buildArrays();
 
