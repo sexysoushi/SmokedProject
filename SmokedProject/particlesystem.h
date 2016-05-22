@@ -29,6 +29,11 @@ private:
     float nbMax;
     float maxTimeAlive;
     float spread;
+
+    //shader const
+    const float speed;
+    const float gravity;
+
     bool isStarted;
 
     float disAngle;

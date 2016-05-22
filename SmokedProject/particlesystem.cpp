@@ -1,14 +1,16 @@
 #include "particlesystem.h"
 
 ParticleSystem::ParticleSystem()
-    : rate(200),
-      nbMax(1000.0),
+    : rate(1000),
+      nbMax(50000.0),
       maxTimeAlive(1000.0),
       isStarted(false),
-      spread(20),
+      spread(40),
       positions(NULL),
       velocities(NULL),
-      ages(NULL)
+      ages(NULL),
+      speed(8),
+      gravity(1.8)
 {
     addParticle();
 
@@ -107,10 +109,10 @@ void ParticleSystem::buildArrays(){
         velocities[3*i+1] = p->velocity.y;
         velocities[3*i+2] = p->velocity.z;
 
-        ages[i] = timeInterval(p->startTime, Clock::now());
+        ages[i] = timeInterval(p->startTime, Clock::now()) / 1000.0f;
 
         //std::cout<<velocities[3*i]<<" "<<velocities[3*i+1]<<" "<<velocities[3*i+2]<<std::endl;
-        std::cout << i << " : " << ages[i] << std::endl;
+        //std::cout << i << " : " << ages[i] << std::endl;
     }
 }
 
@@ -121,26 +123,34 @@ vec3 ParticleSystem::randomVector()
     v.y = 1;
     v.z = 0;
 
-    float rAngle = M_PI * spread / 180.0f;
+//    //float rAngle = M_PI * spread / 180.0f;
+//    float rAngle = randomG.getRandomNumber(spread) * M_PI/180.0;
 
-    if(randomG.getFloat32() > 1.5f)
-    {
-        // rotation du vecteur jusqu'au spread max (selon l'axe z arbitraire)
-        v.x = -v.y * std::sin(rAngle);
-        v.y = v.y * std::cos(rAngle);
-    }
-    else
-    {
-        // rotation du vecteur jusqu'au spread max (selon l'axe x arbitraire)
-        v.y = v.y * std::cos(rAngle);
-        v.z = v.y * std::sin(rAngle);
-    }
+//    if(randomG.getFloat32() > 1.5f)
+//    {
+//        // rotation du vecteur jusqu'au spread max (selon l'axe z arbitraire)
+//        v.x = -v.y * std::sin(rAngle);
+//        v.y = v.y * std::cos(rAngle);
+//    }
+//    else
+//    {
+//        // rotation du vecteur jusqu'au spread max (selon l'axe x arbitraire)
+//        v.y = v.y * std::cos(rAngle);
+//        v.z = v.y * std::sin(rAngle);
+//    }
 
-    // rotation <2.PI autour de y
-     float disAngle = randomG.getRandomNumber(2 * M_PI);
-    //disAngle += 0.15;
-    v.x = v.z * std::sin(disAngle) + v.x * std::cos(disAngle);
-    v.z = v.z * std::cos(disAngle) - v.x * std::sin(disAngle) ;
+//    // rotation <2.PI autour de y
+//     float disAngle = randomG.getRandomNumber(2 * M_PI);
+//    //disAngle += 0.15;
+//    v.x = v.z * std::sin(disAngle) + v.x * std::cos(disAngle);
+//    v.z = v.z * std::cos(disAngle) - v.x * std::sin(disAngle);
+
+    float rAngle = randomG.getRandomNumber(spread) * M_PI/180.0f;
+    float disAngle = randomG.getRandomNumber(2 * M_PI);
+
+    v.y = std::cos(rAngle);
+    v.x = rAngle*std::cos(disAngle);
+    v.z = rAngle*std::sin(disAngle);
 
     return v;
 }
@@ -151,8 +161,11 @@ void ParticleSystem::drawShape()
     //std::cout<<TabParticle.size()<<std::endl;
     buildArrays();
 
-    int t = glGetUniformLocation(m_Framework->getCurrentShaderId(), "time");
-    glUniform1f(t, timeInterval(first, Clock::now()));
+    int s = glGetUniformLocation(m_Framework->getCurrentShaderId(), "speed");
+    glUniform1f(s, speed);
+
+    int g = glGetUniformLocation(m_Framework->getCurrentShaderId(), "gravity");
+    glUniform1f(g, gravity);
 
     GLint p = glGetAttribLocation( m_Framework->getCurrentShaderId(), "position" );
     glEnableVertexAttribArray( p );
@@ -164,7 +177,7 @@ void ParticleSystem::drawShape()
     glEnableVertexAttribArray( a );
 
     glVertexAttribPointer( p, 3, GL_FLOAT, GL_FALSE, 0, positions );
-    glVertexAttribPointer( v, 3, GL_FLOAT, GL_FALSE, 0, velocities );
+    glVertexAttribPointer( v, 3, GL_FLOAT, GL_TRUE, 0, velocities );
     glVertexAttribPointer( a, 1, GL_FLOAT, GL_FALSE, 0, ages );
 
     glDrawArrays(GL_POINTS,0,TabParticle.size());
