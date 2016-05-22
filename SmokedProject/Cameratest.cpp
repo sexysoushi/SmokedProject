@@ -47,13 +47,12 @@ Cameratest::initializeObjects()
     glEnable( GL_PROGRAM_POINT_SIZE );
 
     // Chargement des shaders
-    //createShader( "Shaders/color" );
+    createShader( "Shaders/color" );
 
     createShader( "Shaders/PerVertex" );
 
     cout << "Shader color: ";
-    //if (useShader( "color" ))
-    if (useShader( "PerVertex" ))
+    if (useShader( "color" ))
     {
         cout << "Loaded!" << endl;
     }
@@ -78,7 +77,11 @@ Cameratest::render()
         rotate( angle1, 0, 1, 0 );
         rotate( angle2, 1, 0, 0 );
         rotate( angle2, 0, 0, 1 );
+
+        useShader("color");
         g_Basis->draw();
+
+        useShader("PerVertex");
         ps->draw();
     popMatrix();
 

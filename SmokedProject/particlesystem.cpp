@@ -10,7 +10,8 @@ ParticleSystem::ParticleSystem()
       velocities(NULL),
       ages(NULL),
       speed(8),
-      gravity(1.8)
+      gravity(2),
+      down(vec3{0.0f, -1.0f, 0.0f})
 {
     addParticle();
 
@@ -28,7 +29,11 @@ ParticleSystem::ParticleSystem()
     //g_cube = new Cube(1.0);
 }
 
-ParticleSystem::~ParticleSystem(){}
+ParticleSystem::~ParticleSystem(){
+    if(positions = NULL) delete positions;
+    if(velocities != NULL) delete velocities;
+    if(ages != NULL) delete ages;
+}
 
 void ParticleSystem::start()
 {
@@ -96,7 +101,7 @@ void ParticleSystem::buildArrays(){
     if(ages != NULL) delete ages;
     ages = new float[TabParticle.size()];
 
-    for(int i=0; i<TabParticle.size(); i++){
+    for(unsigned int i=0; i<TabParticle.size(); i++){
         Particle* p = TabParticle[i];
 
         //particleMotion(p);
@@ -119,9 +124,9 @@ void ParticleSystem::buildArrays(){
 vec3 ParticleSystem::randomVector()
 {
     vec3 v;
-    v.x = 0;
-    v.y = 1;
-    v.z = 0;
+//    v.x = 0;
+//    v.y = 1;
+//    v.z = 0;
 
 //    //float rAngle = M_PI * spread / 180.0f;
 //    float rAngle = randomG.getRandomNumber(spread) * M_PI/180.0;
@@ -161,11 +166,17 @@ void ParticleSystem::drawShape()
     //std::cout<<TabParticle.size()<<std::endl;
     buildArrays();
 
-    int s = glGetUniformLocation(m_Framework->getCurrentShaderId(), "speed");
+    GLuint mv = glGetUniformLocation(m_Framework->getCurrentShaderId(), "MV");
+    m_Framework->transmitMV(mv);
+
+    GLuint s = glGetUniformLocation(m_Framework->getCurrentShaderId(), "speed");
     glUniform1f(s, speed);
 
-    int g = glGetUniformLocation(m_Framework->getCurrentShaderId(), "gravity");
+    GLuint g = glGetUniformLocation(m_Framework->getCurrentShaderId(), "gravity");
     glUniform1f(g, gravity);
+
+    GLuint d = glGetUniformLocation(m_Framework->getCurrentShaderId(), "down");
+    glUniform3f(d, down.x, down.y, down.z);
 
     GLint p = glGetAttribLocation( m_Framework->getCurrentShaderId(), "position" );
     glEnableVertexAttribArray( p );

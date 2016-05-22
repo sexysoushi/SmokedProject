@@ -33,6 +33,7 @@ private:
     //shader const
     const float speed;
     const float gravity;
+    const vec3 down;
 
     bool isStarted;
 
