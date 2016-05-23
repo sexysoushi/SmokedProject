@@ -1,12 +1,4 @@
-#include "Cameratest.h"
-
-#include "GlFrame.h"
-
-
-#include "Shapes/Basis.h"
-#include "particlesystem.h"
-
-#include <iostream>
+#include "glframe.h"
 
 using namespace std;
 
@@ -17,13 +9,12 @@ GLfloat taille = -2.0f;
 
 const GLfloat g_AngleSpeed = 10.0f;
 
-ParticleSystem* ps;
 Basis* g_Basis;
 
 
-Cameratest::Cameratest()
+GlFrame::GlFrame(QWidget *parent):GlWindow(parent)
 {
-    setWindowTitle(trUtf8("Particle System - IN55 projet P16"));
+    setMinimumSize(1600,900);
     ps = new ParticleSystem();
     ps->start();
 
@@ -31,7 +22,7 @@ Cameratest::Cameratest()
 }
 
 
-Cameratest::~Cameratest()
+GlFrame::~GlFrame()
 {
     delete g_Basis;
     delete ps;
@@ -39,7 +30,7 @@ Cameratest::~Cameratest()
 
 
 bool
-Cameratest::initializeObjects()
+GlFrame::initializeObjects()
 {
     // Fond gris
     glClearColor( 0.2f, 0.2f, 0.2f, 1.0f );
@@ -66,7 +57,7 @@ Cameratest::initializeObjects()
 
 
 void
-Cameratest::render()
+GlFrame::render()
 {
     // Initialisation de la caméra
     lookAt( 0, 5, 30, 0, 0, 0 );
@@ -88,19 +79,15 @@ Cameratest::render()
 }
 
 void
-Cameratest::mouseMoveEvent(QMouseEvent *event){
+GlFrame::mouseMoveEvent(QMouseEvent *event){
     cout << "YEY SOURIS : " << event->globalX() << " " << event->globalY() << endl;
 }
 
 void
-Cameratest::keyPressEvent( QKeyEvent* event )
+GlFrame::keyPressEvent( QKeyEvent* event )
 {
     switch( event->key())
     {
-    case Qt::Key_Escape:
-                close();
-                break;
-
             case Qt::Key_Left:
                 angle1 -= g_AngleSpeed;
                 break;
@@ -126,5 +113,14 @@ Cameratest::keyPressEvent( QKeyEvent* event )
             case Qt::Key_R:
                 angle1 = angle2 = 0.0f;
                 break;
+
+            case Qt::Key_S:
+                ps->stop();
     }
+}
+
+
+ParticleSystem * GlFrame::getParticleSytem()
+{
+    return ps;
 }

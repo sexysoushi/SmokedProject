@@ -23,17 +23,18 @@ void main()
 {
 
     vec3 np;
+    // initial velocity * time
     np = position + speed * velocity * age;
 
-//    vec3 down = vec4(0, -1, 0);
+    // gravity following down vector
     np = np + down * gravity * age * age;
 
     gl_Position = MVP * vec4(np, 1.0f );
 
-    gl_PointSize = 4 - age;
+    gl_PointSize = 10 - 2*age;
 
     fColor = color;
-    fColor.x = 1 - age;
+    fColor.x = 4 - age;
     fColor.y = age / 2;
 
 }

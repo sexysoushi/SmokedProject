@@ -1,14 +1,17 @@
 #ifndef CAMERATEST_H
 #define CAMERATEST_H
 #include "Camera.h"
-
+#include "glframe.h"
+#include "particlesystem.h"
+#include "Shapes/Basis.h"
 #include "GlWindow.h"
+#include <iostream>
 
-class Cameratest: public GlWindow
+class GlFrame: public GlWindow
 {
     public:
-        Cameratest();
-        ~Cameratest();
+        GlFrame(QWidget* parent=0);
+        ~GlFrame();
 
         /*!
         *\brief Initialization des objets.
@@ -22,6 +25,13 @@ class Cameratest: public GlWindow
 
         void mouseMoveEvent(QMouseEvent *);
         void keyPressEvent(QKeyEvent *);
+
+        ParticleSystem* getParticleSytem();
+
+private:
+
+        ParticleSystem* ps;
+
 };
 
 #endif // CAMERATEST_H

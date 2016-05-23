@@ -22,6 +22,7 @@ struct Particle{
 
 class ParticleSystem : public Object3D
 {
+
 private:
     vec3 position;
     vec3 orientation;
@@ -63,6 +64,7 @@ private:
     float timeInterval(Clock::time_point start, Clock::time_point end);
 
 
+    void deleteDeadParticles();
 public:
     ParticleSystem();
     ~ParticleSystem();
@@ -71,6 +73,8 @@ public:
     void stop();
 
     void updateTime();
+
+    void setRate(double r);
 
 protected:
     void drawShape();

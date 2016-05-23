@@ -28,12 +28,13 @@ HEADERS  += \
     Common/RandomNumberGenerator.h \
     Common/Types.h \
     Common/Vectors.h \
-    GlFrame.h \
     particlesystem.h \
     Common/Shapes/cube.h \
     Quaternion.h \
     Camera.h \
-    Cameratest.h
+    mainwindow.h \
+    glframe.h \
+    parameterswidget.h
 
 SOURCES += main.cpp\
     Common/GlFramework.cpp \
@@ -42,12 +43,13 @@ SOURCES += main.cpp\
     Common/Object3D.cpp \
     Common/Shapes/Basis.cpp \
     Common/RandomNumberGenerator.cpp \
-    GlFrame.cpp \
     particlesystem.cpp \
     Common/Shapes/cube.cpp \
     Quaternion.cpp \
     Camera.cpp \
-    Cameratest.cpp
+    mainwindow.cpp \
+    glframe.cpp \
+    parameterswidget.cpp
 
 
 DISTFILES += \
@@ -61,3 +63,5 @@ OTHER_FILES += \
     release/Shaders/color.fs \
     release/Shaders/PerVertex.fs \
     release/Shaders/PerVertex.vs
+
+FORMS +=

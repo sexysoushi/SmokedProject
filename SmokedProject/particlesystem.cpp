@@ -3,7 +3,7 @@
 ParticleSystem::ParticleSystem()
     : rate(1000),
       nbMax(50000.0),
-      maxTimeAlive(1000.0),
+      maxTimeAlive(3000.0),
       isStarted(false),
       spread(40),
       positions(NULL),
@@ -50,6 +50,10 @@ float ParticleSystem::timeInterval(Clock::time_point start, Clock::time_point en
     return std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 }
 
+void ParticleSystem::setRate(double r){
+    rate = r;
+}
+
 void ParticleSystem::updateTime()
 {
     if(isStarted)
@@ -91,7 +95,22 @@ void ParticleSystem::addParticle()
     TabParticle.push_back(particle);
 }
 
+void ParticleSystem::deleteDeadParticles(){
+
+    for(unsigned int i=0; i<TabParticle.size(); i++){
+        Particle* p = TabParticle[i];
+        if(timeInterval(p->startTime, Clock::now()) > maxTimeAlive){
+            TabParticle.erase(TabParticle.begin()+i);
+            TabParticle.shrink_to_fit();
+        }
+    }
+}
+
+//TODO maxTimeAlive
 void ParticleSystem::buildArrays(){
+
+    deleteDeadParticles();
+
     if(positions != NULL) delete positions;
     positions = new float[TabParticle.size()*3];
 
@@ -103,8 +122,6 @@ void ParticleSystem::buildArrays(){
 
     for(unsigned int i=0; i<TabParticle.size(); i++){
         Particle* p = TabParticle[i];
-
-        //particleMotion(p);
 
         positions[3*i] = p->position.x;
         positions[3*i+1] = p->position.y;
@@ -166,8 +183,8 @@ void ParticleSystem::drawShape()
     //std::cout<<TabParticle.size()<<std::endl;
     buildArrays();
 
-    GLuint mv = glGetUniformLocation(m_Framework->getCurrentShaderId(), "MV");
-    m_Framework->transmitMV(mv);
+//    GLuint mv = glGetUniformLocation(m_Framework->getCurrentShaderId(), "MV");
+//    m_Framework->transmitMV(mv);
 
     GLuint s = glGetUniformLocation(m_Framework->getCurrentShaderId(), "speed");
     glUniform1f(s, speed);

@@ -13,7 +13,7 @@
 #include "GlWindow.h"
 
 
-GlWindow::GlWindow()
+GlWindow::GlWindow(QWidget* parent):QGLWidget(parent)
 {
     resize(1024, 768);
     startTimer(30);

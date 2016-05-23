@@ -11,7 +11,7 @@
 class GlWindow : public QGLWidget, public GlFramework
 {
 	public: // methods
-		GlWindow();
+        GlWindow(QWidget* parent = 0);
 		~GlWindow();
 
 	private: // methods
