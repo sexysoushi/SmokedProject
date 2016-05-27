@@ -1,8 +1,4 @@
 #include <QApplication>
-//#include "GlFrame.h"
-
-//#include "Cameratest.h"
-
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])

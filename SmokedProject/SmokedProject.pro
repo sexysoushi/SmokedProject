@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-CONFIG += console c++11 debug
+CONFIG += console c++11 debug release
 QT += core gui opengl
 TARGET = SmokedProject
 TEMPLATE = app
@@ -18,38 +18,38 @@ DESTDIR = release
 OBJECTS_DIR = obj
 
 HEADERS  += \
-    Common/GlFramework.h \
-    Common/GlWindow.h \
-    Common/LF_String.h \
-    Common/Object3D.h \
-    Common/Shapes/Basis.h \
-    Common/AbstractFramework.h \
-    Common/MemDefns.h \
-    Common/RandomNumberGenerator.h \
-    Common/Types.h \
-    Common/Vectors.h \
-    particlesystem.h \
-    Common/Shapes/cube.h \
-    Quaternion.h \
-    Camera.h \
-    mainwindow.h \
-    glframe.h \
-    parameterswidget.h
+    src/Common/GlFramework.h \
+    src/Common/GlWindow.h \
+    src/Common/LF_String.h \
+    src/Common/Object3D.h \
+    src/Common/Shapes/Basis.h \
+    src/Common/AbstractFramework.h \
+    src/Common/MemDefns.h \
+    src/Common/RandomNumberGenerator.h \
+    src/Common/Types.h \
+    src/Common/Vectors.h \
+    src/particlesystem.h \
+    src/Common/Shapes/cube.h \
+    src/Quaternion.h \
+    src/Camera.h \
+    src/mainwindow.h \
+    src/glframe.h \
+    src/parameterswidget.h
 
-SOURCES += main.cpp\
-    Common/GlFramework.cpp \
-    Common/GlWindow.cpp \
-    Common/LF_String.cpp \
-    Common/Object3D.cpp \
-    Common/Shapes/Basis.cpp \
-    Common/RandomNumberGenerator.cpp \
-    particlesystem.cpp \
-    Common/Shapes/cube.cpp \
-    Quaternion.cpp \
-    Camera.cpp \
-    mainwindow.cpp \
-    glframe.cpp \
-    parameterswidget.cpp
+SOURCES += src/main.cpp\
+    src/Common/GlFramework.cpp \
+    src/Common/GlWindow.cpp \
+    src/Common/LF_String.cpp \
+    src/Common/Object3D.cpp \
+    src/Common/Shapes/Basis.cpp \
+    src/Common/RandomNumberGenerator.cpp \
+    src/particlesystem.cpp \
+    src/Common/Shapes/cube.cpp \
+    src/Quaternion.cpp \
+    src/Camera.cpp \
+    src/mainwindow.cpp \
+    src/glframe.cpp \
+    src/parameterswidget.cpp
 
 
 DISTFILES += \
