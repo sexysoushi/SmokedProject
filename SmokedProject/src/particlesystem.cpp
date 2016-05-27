@@ -214,7 +214,8 @@ void ParticleSystem::updateTime()
         }
     }
 
-    deleteDeadParticles();
+    if(maxTimeAlive > 0)
+        deleteDeadParticles();
 }
 
 void ParticleSystem::addParticle()
@@ -317,7 +318,11 @@ vec3 ParticleSystem::randomVector()
 
 void ParticleSystem::drawShape()
 {
+    if(!started)
+        return;
+
     //std::cout<<TabParticle.size()<<std::endl;
+    updateTime();
     buildArrays();
 
 //    GLuint mv = glGetUniformLocation(m_Framework->getCurrentShaderId(), "MV");

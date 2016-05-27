@@ -33,8 +33,7 @@ HEADERS  += \
     src/Quaternion.h \
     src/Camera.h \
     src/mainwindow.h \
-    src/glframe.h \
-    src/parameterswidget.h
+    src/glframe.h
 
 SOURCES += src/main.cpp\
     src/Common/GlFramework.cpp \
@@ -48,8 +47,7 @@ SOURCES += src/main.cpp\
     src/Quaternion.cpp \
     src/Camera.cpp \
     src/mainwindow.cpp \
-    src/glframe.cpp \
-    src/parameterswidget.cpp
+    src/glframe.cpp
 
 
 DISTFILES += \

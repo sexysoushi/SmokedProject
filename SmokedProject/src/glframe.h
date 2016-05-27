@@ -21,15 +21,15 @@ class GlFrame: public GlWindow
         void mouseMoveEvent(QMouseEvent *);
         void keyPressEvent(QKeyEvent *);
 
-        ParticleSystem* getParticleSytem();
+        void addParticleSystem(ParticleSystem* ps);
+        void clear();
 
-protected:
+    protected:
         QSize sizeHint() const;
         QSize minimumSizeHint() const;
 
-private:
-
-        ParticleSystem* ps;
+    private:
+        std::vector<ParticleSystem*> p_systems;
 
 };
 

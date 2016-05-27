@@ -13,9 +13,8 @@ Basis* g_Basis;
 
 GlFrame::GlFrame(QWidget *parent):GlWindow(parent)
 {
-    setMinimumSize(1600,900);
-    //resize(1024, 768);
-    ps = new ParticleSystem();
+    ParticleSystem* ps = new ParticleSystem();
+    p_systems.push_back(ps);
     ps -> start();
 
     g_Basis = new Basis( 10.0 );
@@ -25,7 +24,6 @@ GlFrame::GlFrame(QWidget *parent):GlWindow(parent)
 GlFrame::~GlFrame()
 {
     delete g_Basis;
-    delete ps;
 }
 
 
@@ -72,14 +70,16 @@ GlFrame::render()
         useShader("color");
         g_Basis->draw();
 
-        useShader("PerVertex");
+        std::cout << p_systems.size() << std::endl;
 
-        ps->lockMutex();
-        if(ps->isStarted()){
-            ps->updateTime();
-            ps->draw();
+        useShader("PerVertex");
+        for(unsigned int i=0; i<p_systems.size(); i++){
+            pushMatrix();
+            //translate(i, 0, 0);
+            p_systems[i]->draw();
+            popMatrix();
         }
-        ps->unlockMutex();
+
     popMatrix();
 
 }
@@ -114,10 +114,20 @@ GlFrame::keyPressEvent( QKeyEvent* event )
             case Qt::Key_R:
                 angle1 = angle2 = 0.0f;
                 break;
-
-            case Qt::Key_S:
-                ps->stop();
     }
+}
+
+void GlFrame::addParticleSystem(ParticleSystem *ps)
+{
+    if(ps != NULL)
+        p_systems.push_back(ps);
+    else
+        std::cout << "wat";
+}
+
+void GlFrame::clear()
+{
+    p_systems.clear();
 }
 
 QSize GlFrame::minimumSizeHint() const
@@ -128,10 +138,4 @@ QSize GlFrame::minimumSizeHint() const
 QSize GlFrame::sizeHint() const
 {
     return QSize(1024,600);
-}
-
-
-ParticleSystem * GlFrame::getParticleSytem()
-{
-    return ps;
 }
