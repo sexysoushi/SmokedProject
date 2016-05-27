@@ -6,16 +6,24 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     gl = new GlFrame(this);
 
-    parameters = new ParametersWidget(this);
-
     QHBoxLayout* layout = new QHBoxLayout();
     layout->addWidget(gl);
-    layout->addWidget(parameters);
+    //layout->addWidget(parameters);
 
     QWidget* window = new QWidget();
-    window->setLayout(layout);
 
+    QWidget* w = new QWidget();
+    parameters = new ParametersWidget(this);
+
+    QHBoxLayout* pLay = new QHBoxLayout();
+    pLay->addWidget(parameters);
+
+    window->setLayout(layout);
     setCentralWidget(window);
+
+    w->setLayout(pLay);
+    w->show();
+
 }
 
 MainWindow::~MainWindow()

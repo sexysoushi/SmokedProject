@@ -9,6 +9,7 @@
 #include <chrono>
 #include <iostream>
 #include <deque>
+#include <QMutex>
 
 typedef std::chrono::steady_clock Clock;
 
@@ -27,16 +28,15 @@ private:
     vec3 position;
     vec3 orientation;
     float rate;
-    float nbMax;
+    int nbMax;
     float maxTimeAlive;
     float spread;
 
-    //shader const
-    const float speed;
-    const float gravity;
-    const vec3 down;
+    float speed;
+    float gravity;
+    vec3 down;
 
-    bool isStarted;
+    bool started;
 
     float disAngle;
 
@@ -54,6 +54,8 @@ private:
 
     RandomNumberGenerator randomG;
 
+    QMutex* mut;
+
     void particleMotion(Particle* particle);
     void addParticle();
     void resetParticle(Particle* particle);
@@ -65,8 +67,12 @@ private:
 
 
     void deleteDeadParticles();
+
 public:
     ParticleSystem();
+    ParticleSystem(float r, int n, float t, float s, float sp, float gr, vec3 d);
+    ParticleSystem(ParticleSystem* p);
+
     ~ParticleSystem();
 
     void start();
@@ -74,7 +80,33 @@ public:
 
     void updateTime();
 
+    bool isStarted();
+
+    void lockMutex();
+    void unlockMutex();
+
+    void clear();
+
     void setRate(double r);
+    float getRate() const;
+
+    int getNbMax() const;
+    void setNbMax(int value);
+
+    float getMaxTimeAlive() const;
+    void setMaxTimeAlive(float value);
+
+    float getSpread() const;
+    void setSpread(float value);
+
+    float getSpeed() const;
+    float setSpeed(float value);
+
+    float getGravity() const;
+    float setGravity(float value);
+
+    vec3 getDown() const;
+    void setDown(vec3 v);
 
 protected:
     void drawShape();

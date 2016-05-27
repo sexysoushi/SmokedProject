@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-CONFIG += console release c++11
+CONFIG += console c++11 debug
 QT += core gui opengl
 TARGET = SmokedProject
 TEMPLATE = app

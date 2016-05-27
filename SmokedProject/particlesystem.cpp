@@ -1,19 +1,22 @@
 #include "particlesystem.h"
+#include <cmath>
 
 ParticleSystem::ParticleSystem()
     : rate(1000),
       nbMax(50000.0),
       maxTimeAlive(3000.0),
-      isStarted(false),
+      started(false),
       spread(40),
-      positions(NULL),
-      velocities(NULL),
-      ages(NULL),
       speed(8),
       gravity(2),
-      down(vec3{0.0f, -1.0f, 0.0f})
+      down(vec3{0.0f, -1.0f, 0.0f}),
+      positions(NULL),
+      velocities(NULL),
+      ages(NULL)
 {
     addParticle();
+
+    mut = new QMutex();
 
     orientation.x = 0;
     orientation.y = 1;
@@ -29,6 +32,41 @@ ParticleSystem::ParticleSystem()
     //g_cube = new Cube(1.0);
 }
 
+ParticleSystem::ParticleSystem(float r, int n, float t, float s, float sp, float gr, vec3 d)
+    : rate(r),
+      nbMax(n),
+      maxTimeAlive(t),
+      started(false),
+      spread(s),
+      speed(sp),
+      gravity(gr),
+      down(d),
+      positions(NULL),
+      velocities(NULL),
+      ages(NULL)
+{
+    addParticle();
+
+    mut = new QMutex();
+
+    orientation.x = 0;
+    orientation.y = 1;
+    orientation.z = 0;
+
+    position.x = 0;
+    position.y = 0;
+    position.z = 0;
+
+    disAngle=0;
+
+    randomG.initSeed(clock());
+    //g_cube = new Cube(1.0);
+}
+
+ParticleSystem::ParticleSystem(ParticleSystem *p)
+    :ParticleSystem(p->getRate(), p->getNbMax(), p->getMaxTimeAlive(), p->getSpread(), p->getSpeed(), p->getGravity(), p->getDown())
+{}
+
 ParticleSystem::~ParticleSystem(){
     if(positions = NULL) delete positions;
     if(velocities != NULL) delete velocities;
@@ -37,13 +75,48 @@ ParticleSystem::~ParticleSystem(){
 
 void ParticleSystem::start()
 {
-    isStarted = true;
+    started = true;
 }
 
 
 void ParticleSystem::stop()
 {
-    isStarted = false;
+    started = false;
+    clear();
+}
+
+bool ParticleSystem::isStarted(){
+    return started;
+}
+
+
+void ParticleSystem::lockMutex(){
+    //mut->lock();
+}
+
+void ParticleSystem::unlockMutex(){
+    //mut->unlock();
+}
+
+void ParticleSystem::clear()
+{
+    TabParticle.clear();
+    TabParticle.shrink_to_fit();
+
+    if(positions != NULL) {
+        delete positions;
+        positions == NULL;
+    }
+
+    if(velocities != NULL){
+        delete velocities;
+        velocities = NULL;
+    }
+
+    if(ages != NULL) {
+        delete ages;
+        ages = NULL;
+    }
 }
 
 float ParticleSystem::timeInterval(Clock::time_point start, Clock::time_point end){
@@ -51,33 +124,97 @@ float ParticleSystem::timeInterval(Clock::time_point start, Clock::time_point en
 }
 
 void ParticleSystem::setRate(double r){
-    rate = r;
+    nbMax = r;
 }
 
+float ParticleSystem::getRate() const
+{
+    return rate;
+}
+
+
+int ParticleSystem::getNbMax() const
+{
+    return nbMax;
+}
+
+void ParticleSystem::setNbMax(int value)
+{
+    nbMax = value;
+}
+
+float ParticleSystem::getMaxTimeAlive() const
+{
+    return maxTimeAlive;
+}
+
+void ParticleSystem::setMaxTimeAlive(float value)
+{
+    maxTimeAlive = value;
+}
+
+float ParticleSystem::getSpread() const
+{
+    return spread;
+}
+
+void ParticleSystem::setSpread(float value)
+{
+    spread = value;
+}
+
+float ParticleSystem::getSpeed() const
+{
+    return speed;
+}
+
+float ParticleSystem::setSpeed(float value)
+{
+    speed = value;
+}
+
+float ParticleSystem::getGravity() const
+{
+    return gravity;
+}
+
+float ParticleSystem::setGravity(float value)
+{
+    gravity = value;
+}
+
+vec3 ParticleSystem::getDown() const
+{
+    return down;
+}
+
+void ParticleSystem::setDown(vec3 v){
+    down = v;
+}
+
+// life and death of particles
 void ParticleSystem::updateTime()
 {
-    if(isStarted)
+    timeSinceLastFrame = timeInterval(currentTime, std::chrono::steady_clock::now());
+
+    currentTime = Clock::now();
+    timeSinceLastTrigger = timeInterval(lastTrigger, currentTime);
+
+    //std::cout<<timeSinceLastTrigger<<std::endl;
+
+    int nb = timeSinceLastTrigger / (1000/rate);
+
+    if(nb >= 1)
     {
-        timeSinceLastFrame = timeInterval(currentTime, std::chrono::steady_clock::now());
-
-        currentTime = Clock::now();
-        timeSinceLastTrigger = timeInterval(lastTrigger, currentTime);
-
+        lastTrigger = currentTime;
         //std::cout<<timeSinceLastTrigger<<std::endl;
-
-        int nb = timeSinceLastTrigger / (1000/rate);
-
-        if(nb >= 1)
-        {
-            lastTrigger = currentTime;
-            //std::cout<<timeSinceLastTrigger<<std::endl;
-            while(nb >= 1){
-                addParticle();
-                nb--;
-            }
+        while(nb >= 1){
+            addParticle();
+            nb--;
         }
     }
 
+    deleteDeadParticles();
 }
 
 void ParticleSystem::addParticle()
@@ -99,17 +236,17 @@ void ParticleSystem::deleteDeadParticles(){
 
     for(unsigned int i=0; i<TabParticle.size(); i++){
         Particle* p = TabParticle[i];
-        if(timeInterval(p->startTime, Clock::now()) > maxTimeAlive){
+        if(p != NULL && timeInterval(p->startTime, currentTime) > maxTimeAlive){
             TabParticle.erase(TabParticle.begin()+i);
             TabParticle.shrink_to_fit();
         }
     }
 }
 
-//TODO maxTimeAlive
+
 void ParticleSystem::buildArrays(){
 
-    deleteDeadParticles();
+    //deleteDeadParticles();
 
     if(positions != NULL) delete positions;
     positions = new float[TabParticle.size()*3];

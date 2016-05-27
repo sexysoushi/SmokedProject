@@ -5,6 +5,8 @@
 #include "particlesystem.h"
 #include "Shapes/Basis.h"
 #include "GlWindow.h"
+#include <QMutex>
+#include <QWaitCondition>
 #include <iostream>
 
 class GlFrame: public GlWindow

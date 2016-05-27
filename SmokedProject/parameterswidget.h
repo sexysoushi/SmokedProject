@@ -4,7 +4,7 @@
 #include "particlesystem.h"
 
 #include <QWidget>
-#include <QInputDialog>
+#include <QDoubleSpinBox>
 #include <QSlider>
 #include <QCheckBox>
 #include <QGridLayout>
@@ -16,11 +16,11 @@ public:
     explicit ParametersWidget(QWidget *parent = 0);
 
 private:
-    QInputDialog* rateBox;
-    QInputDialog* nbMaxBox;
-    QInputDialog* maxTimeBox;
-    QInputDialog* speedBox;
-    QInputDialog* gravityBox;
+    QDoubleSpinBox* rateBox;
+    QDoubleSpinBox* nbMaxBox;
+    QDoubleSpinBox* maxTimeBox;
+    QDoubleSpinBox* speedBox;
+    QDoubleSpinBox* gravityBox;
     QSlider* spreadSlide;
     QCheckBox* startedBox;
 
@@ -32,6 +32,7 @@ signals:
 
 public slots:
     void changeRate(double r);
+    void startAndStop(bool b);
 
 };
 

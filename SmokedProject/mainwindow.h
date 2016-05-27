@@ -7,6 +7,7 @@
 
 #include <QMainWindow>
 #include <QHBoxLayout>
+#include <QPushButton>
 
 
 class MainWindow : public QMainWindow

@@ -5,7 +5,6 @@ using namespace std;
 
 GLfloat angle1 = 30.0f;
 GLfloat angle2 = 20.0f;
-GLfloat taille = -2.0f;
 
 const GLfloat g_AngleSpeed = 10.0f;
 
@@ -15,8 +14,9 @@ Basis* g_Basis;
 GlFrame::GlFrame(QWidget *parent):GlWindow(parent)
 {
     setMinimumSize(1600,900);
+    //resize(1024, 768);
     ps = new ParticleSystem();
-    ps->start();
+    ps -> start();
 
     g_Basis = new Basis( 10.0 );
 }
@@ -61,7 +61,7 @@ GlFrame::render()
 {
     // Initialisation de la caméra
     lookAt( 0, 5, 30, 0, 0, 0 );
-    ps->updateTime();
+
 
     // Rendu des objets
     pushMatrix();
@@ -73,10 +73,17 @@ GlFrame::render()
         g_Basis->draw();
 
         useShader("PerVertex");
-        ps->draw();
+
+        ps->lockMutex();
+        if(ps->isStarted()){
+            ps->updateTime();
+            ps->draw();
+        }
+        ps->unlockMutex();
     popMatrix();
 
 }
+
 
 void
 GlFrame::mouseMoveEvent(QMouseEvent *event){
@@ -98,16 +105,10 @@ GlFrame::keyPressEvent( QKeyEvent* event )
 
             case Qt::Key_Up:
                 angle2 -= g_AngleSpeed;
-                taille += 0.1;
-                if (taille > 0)
-                    taille = 0;
                 break;
 
             case Qt::Key_Down:
                 angle2 += g_AngleSpeed;
-                taille -= 0.1;
-                if (taille < -6)
-                    taille = -6;
                 break;
 
             case Qt::Key_R:
