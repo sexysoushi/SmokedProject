@@ -13,8 +13,6 @@ Basis* g_Basis;
 
 GlFrame::GlFrame(QWidget *parent):GlWindow(parent)
 {
-    //resize(1024, 768);
-    ps = new ParticleSystem();
     ParticleSystem* ps = new ParticleSystem();
     p_systems.push_back(ps);
     ps -> start();
@@ -39,10 +37,19 @@ GlFrame::initializeObjects()
 
     // Chargement des shaders
     createShader( "Shaders/color" );
-    createShader( "Shaders/Atome" );
+
     createShader( "Shaders/PerVertex" );
-    createShader( "Shaders/Tornade" );
-    createShader( "Shaders/Firework" );
+
+    cout << "Shader color: ";
+    if (useShader( "color" ))
+    {
+        cout << "Loaded!" << endl;
+    }
+    else
+    {
+        cout << "NOT Loaded!" << endl;
+    }
+
     return true;
 }
 
@@ -60,12 +67,12 @@ GlFrame::render()
         rotate( angle2, 1, 0, 0 );
         rotate( angle2, 0, 0, 1 );
 
-        //useShader("color");
+        useShader("color");
         g_Basis->draw();
 
-        useShader("PerVertex");
-
         std::cout << p_systems.size() << std::endl;
+
+        useShader("PerVertex");
         for(unsigned int i=0; i<p_systems.size(); i++){
             pushMatrix();
             //translate(i, 0, 0);
