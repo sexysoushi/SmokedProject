@@ -13,8 +13,18 @@ Basis* g_Basis;
 
 GlFrame::GlFrame(QWidget *parent):GlWindow(parent)
 {
+<<<<<<< .mine
+    setMinimumSize(900,700);
+    //resize(1024, 768);
+    ps = new ParticleSystem();
+||||||| .r34
+    setMinimumSize(1600,900);
+    //resize(1024, 768);
+    ps = new ParticleSystem();
+=======
     ParticleSystem* ps = new ParticleSystem();
     p_systems.push_back(ps);
+>>>>>>> .r35
     ps -> start();
 
     g_Basis = new Basis( 10.0 );
@@ -37,19 +47,10 @@ GlFrame::initializeObjects()
 
     // Chargement des shaders
     createShader( "Shaders/color" );
-
+    createShader( "Shaders/Atome" );
     createShader( "Shaders/PerVertex" );
-
-    cout << "Shader color: ";
-    if (useShader( "color" ))
-    {
-        cout << "Loaded!" << endl;
-    }
-    else
-    {
-        cout << "NOT Loaded!" << endl;
-    }
-
+    createShader( "Shaders/Tornade" );
+    createShader( "Shaders/Firework" );
     return true;
 }
 
@@ -67,12 +68,19 @@ GlFrame::render()
         rotate( angle2, 1, 0, 0 );
         rotate( angle2, 0, 0, 1 );
 
-        useShader("color");
+        //useShader("color");
         g_Basis->draw();
 
+<<<<<<< .mine
+        //useShader("PerVertex");
+        //useShader("Atome");
+||||||| .r34
+        useShader("PerVertex");
+=======
         std::cout << p_systems.size() << std::endl;
 
         useShader("PerVertex");
+>>>>>>> .r35
         for(unsigned int i=0; i<p_systems.size(); i++){
             pushMatrix();
             //translate(i, 0, 0);

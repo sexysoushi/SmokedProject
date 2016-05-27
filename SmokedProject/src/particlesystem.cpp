@@ -308,7 +308,7 @@ vec3 ParticleSystem::randomVector()
     float rAngle = randomG.getRandomNumber(spread) * M_PI/180.0f;
     float disAngle = randomG.getRandomNumber(2 * M_PI);
 
-    v.y = std::cos(rAngle);
+    v.y = rAngle*std::cos(disAngle);
     v.x = rAngle*std::cos(disAngle);
     v.z = rAngle*std::sin(disAngle);
 
