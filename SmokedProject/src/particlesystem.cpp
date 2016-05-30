@@ -16,8 +16,6 @@ ParticleSystem::ParticleSystem()
 {
     addParticle();
 
-    mut = new QMutex();
-
     orientation.x = 0;
     orientation.y = 1;
     orientation.z = 0;
@@ -46,8 +44,6 @@ ParticleSystem::ParticleSystem(float r, int n, float t, float s, float sp, float
       ages(NULL)
 {
     addParticle();
-
-    mut = new QMutex();
 
     orientation.x = 0;
     orientation.y = 1;

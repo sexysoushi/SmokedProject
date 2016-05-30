@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     rateSlide->setValue(1000);
 
     nbMaxSlide = new QSlider(Qt::Horizontal);
-    nbMaxSlide->setRange(1,1000000);
+    nbMaxSlide->setRange(1,100000);
     nbMaxSlide->setSingleStep(1000);
     nbMaxSlide->setValue(50000);
 

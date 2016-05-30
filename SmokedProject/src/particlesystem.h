@@ -9,7 +9,6 @@
 #include <chrono>
 #include <iostream>
 #include <deque>
-#include <QMutex>
 
 typedef std::chrono::steady_clock Clock;
 
@@ -53,8 +52,6 @@ private:
     float timeSinceLastFrame;
 
     RandomNumberGenerator randomG;
-
-    QMutex* mut;
 
     void particleMotion(Particle* particle);
     void addParticle();
