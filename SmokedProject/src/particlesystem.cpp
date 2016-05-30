@@ -272,45 +272,59 @@ void ParticleSystem::buildArrays(){
     }
 }
 
+//vec3 ParticleSystem::randomVector()
+//{
+//    vec3 v;
+////    v.x = 0;
+////    v.y = 1;
+////    v.z = 0;
+
+////    //float rAngle = M_PI * spread / 180.0f;
+////    float rAngle = randomG.getRandomNumber(spread) * M_PI/180.0;
+
+////    if(randomG.getFloat32() > 1.5f)
+////    {
+////        // rotation du vecteur jusqu'au spread max (selon l'axe z arbitraire)
+////        v.x = -v.y * std::sin(rAngle);
+////        v.y = v.y * std::cos(rAngle);
+////    }
+////    else
+////    {
+////        // rotation du vecteur jusqu'au spread max (selon l'axe x arbitraire)
+////        v.y = v.y * std::cos(rAngle);
+////        v.z = v.y * std::sin(rAngle);
+////    }
+
+////    // rotation <2.PI autour de y
+////     float disAngle = randomG.getRandomNumber(2 * M_PI);
+////    //disAngle += 0.15;
+////    v.x = v.z * std::sin(disAngle) + v.x * std::cos(disAngle);
+////    v.z = v.z * std::cos(disAngle) - v.x * std::sin(disAngle);
+
+//    float rAngle = randomG.getRandomNumber(spread) * M_PI/180.0f;
+//    float disAngle = randomG.getRandomNumber(2 * M_PI);
+
+//    v.y = std::cos(rAngle);
+//    v.x = rAngle*std::cos(disAngle);
+//    v.z = rAngle*std::sin(disAngle);
+
+//    return v;
+//}
+
+
+//Pour l'effet FIREWORK
 vec3 ParticleSystem::randomVector()
 {
     vec3 v;
-//    v.x = 0;
-//    v.y = 1;
-//    v.z = 0;
-
-//    //float rAngle = M_PI * spread / 180.0f;
-//    float rAngle = randomG.getRandomNumber(spread) * M_PI/180.0;
-
-//    if(randomG.getFloat32() > 1.5f)
-//    {
-//        // rotation du vecteur jusqu'au spread max (selon l'axe z arbitraire)
-//        v.x = -v.y * std::sin(rAngle);
-//        v.y = v.y * std::cos(rAngle);
-//    }
-//    else
-//    {
-//        // rotation du vecteur jusqu'au spread max (selon l'axe x arbitraire)
-//        v.y = v.y * std::cos(rAngle);
-//        v.z = v.y * std::sin(rAngle);
-//    }
-
-//    // rotation <2.PI autour de y
-//     float disAngle = randomG.getRandomNumber(2 * M_PI);
-//    //disAngle += 0.15;
-//    v.x = v.z * std::sin(disAngle) + v.x * std::cos(disAngle);
-//    v.z = v.z * std::cos(disAngle) - v.x * std::sin(disAngle);
-
     float rAngle = randomG.getRandomNumber(spread) * M_PI/180.0f;
     float disAngle = randomG.getRandomNumber(2 * M_PI);
 
-    v.y = std::cos(rAngle);
+    v.y = rAngle*std::cos(disAngle);
     v.x = rAngle*std::cos(disAngle);
     v.z = rAngle*std::sin(disAngle);
 
     return v;
 }
-
 
 void ParticleSystem::drawShape()
 {
