@@ -62,7 +62,6 @@ private:
 
     float timeInterval(Clock::time_point start, Clock::time_point end);
 
-
     void deleteDeadParticles();
 
 public:

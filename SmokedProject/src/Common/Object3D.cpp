@@ -14,7 +14,7 @@ Object3D::setFramework( AbstractFramework* fw )
 void
 Object3D::draw()
 {
-    if (m_Framework->useShader( "Firework" ))
+    if (m_Framework->useShader( "color" ))
     {
         m_Framework->computeAncillaryMatrices();
         GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );

@@ -13,7 +13,6 @@ uniform float gravity;
 uniform vec3 down;
 
 uniform mat4 MVP;
-uniform mat4 MV;
 
 out vec3 fColor;
 

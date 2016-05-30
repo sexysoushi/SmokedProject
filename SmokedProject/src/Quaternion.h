@@ -7,10 +7,10 @@
 class Quaternion
 {
 private:
-    float w;
     float x;
     float y;
     float z;
+    float w;
 
 
 public:

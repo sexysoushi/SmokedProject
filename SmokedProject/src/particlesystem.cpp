@@ -115,10 +115,6 @@ void ParticleSystem::clear()
     }
 }
 
-float ParticleSystem::timeInterval(Clock::time_point start, Clock::time_point end){
-    return std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-}
-
 void ParticleSystem::setRate(double r){
     nbMax = r;
 }
@@ -272,59 +268,40 @@ void ParticleSystem::buildArrays(){
     }
 }
 
+vec3 ParticleSystem::randomVector()
+{
+    vec3 v;
+
+    float rAngle = randomG.getRandomNumber(spread) * M_PI/180.0f;
+    float disAngle = randomG.getRandomNumber(2 * M_PI);
+
+    v.y = std::cos(rAngle);
+    v.x = rAngle*std::cos(disAngle);
+    v.z = rAngle*std::sin(disAngle);
+
+    return v;
+}
+
+float ParticleSystem::timeInterval(Clock::time_point start, Clock::time_point end){
+    return std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+}
+
+
+////Pour l'effet FIREWORK
 //vec3 ParticleSystem::randomVector()
 //{
 //    vec3 v;
-////    v.x = 0;
-////    v.y = 1;
-////    v.z = 0;
-
-////    //float rAngle = M_PI * spread / 180.0f;
-////    float rAngle = randomG.getRandomNumber(spread) * M_PI/180.0;
-
-////    if(randomG.getFloat32() > 1.5f)
-////    {
-////        // rotation du vecteur jusqu'au spread max (selon l'axe z arbitraire)
-////        v.x = -v.y * std::sin(rAngle);
-////        v.y = v.y * std::cos(rAngle);
-////    }
-////    else
-////    {
-////        // rotation du vecteur jusqu'au spread max (selon l'axe x arbitraire)
-////        v.y = v.y * std::cos(rAngle);
-////        v.z = v.y * std::sin(rAngle);
-////    }
-
-////    // rotation <2.PI autour de y
-////     float disAngle = randomG.getRandomNumber(2 * M_PI);
-////    //disAngle += 0.15;
-////    v.x = v.z * std::sin(disAngle) + v.x * std::cos(disAngle);
-////    v.z = v.z * std::cos(disAngle) - v.x * std::sin(disAngle);
-
 //    float rAngle = randomG.getRandomNumber(spread) * M_PI/180.0f;
 //    float disAngle = randomG.getRandomNumber(2 * M_PI);
 
-//    v.y = std::cos(rAngle);
+//    v.y = rAngle*std::cos(disAngle);
 //    v.x = rAngle*std::cos(disAngle);
 //    v.z = rAngle*std::sin(disAngle);
 
 //    return v;
 //}
 
-
-//Pour l'effet FIREWORK
-vec3 ParticleSystem::randomVector()
-{
-    vec3 v;
-    float rAngle = randomG.getRandomNumber(spread) * M_PI/180.0f;
-    float disAngle = randomG.getRandomNumber(2 * M_PI);
-
-    v.y = rAngle*std::cos(disAngle);
-    v.x = rAngle*std::cos(disAngle);
-    v.z = rAngle*std::sin(disAngle);
-
-    return v;
-}
+// TODO RANDOM VECTOR IN SHADER
 
 void ParticleSystem::drawShape()
 {
@@ -335,9 +312,6 @@ void ParticleSystem::drawShape()
     updateTime();
     buildArrays();
 
-//    GLuint mv = glGetUniformLocation(m_Framework->getCurrentShaderId(), "MV");
-//    m_Framework->transmitMV(mv);
-
     GLuint s = glGetUniformLocation(m_Framework->getCurrentShaderId(), "speed");
     glUniform1f(s, speed);
 
@@ -346,6 +320,7 @@ void ParticleSystem::drawShape()
 
     GLuint d = glGetUniformLocation(m_Framework->getCurrentShaderId(), "down");
     glUniform3f(d, down.x, down.y, down.z);
+
 
     GLint p = glGetAttribLocation( m_Framework->getCurrentShaderId(), "position" );
     glEnableVertexAttribArray( p );
