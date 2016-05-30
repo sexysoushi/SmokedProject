@@ -26,7 +26,7 @@ void main(void)
     float z = sin(speed*age)*sin(age);
     
     gl_Position = MVP* vec4(x, y, z, 1.0);
-    gl_PointSize = 50.0;
+    gl_PointSize = 10.0;
 
     fColor = color;
     fColor.x = age/2;
