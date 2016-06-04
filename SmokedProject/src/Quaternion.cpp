@@ -30,6 +30,7 @@ Vec3 Quaternion::operator*(const Vec3& v)
     res.z = temp.z;
     return res;
 }
+
 Quaternion Quaternion::operator*(const Quaternion& q)
 {
     Quaternion qres = Quaternion();
@@ -38,10 +39,10 @@ Quaternion Quaternion::operator*(const Quaternion& q)
     float qz = q.z;
     float qw = q.w;
 
-    float qrw = w*qw -  x*qx - y*qy -z*qz;
-    float qrx  = w*qx +x*qw +y*qz - z*qy;
-    float qry  = w*qy - x*qz + y*qw +z*qx;
-    float qrz =  w*qz + x*qw - y*qz + z*qy;
+    float qrw = w*qw - x*qx - y*qy - z*qz;
+    float qrx = w*qx + x*qw + y*qz - z*qy;
+    float qry = w*qy - x*qz + y*qw + z*qx;
+    float qrz = w*qz + x*qw - y*qz + z*qy;
     qres.set(qrw, qrx, qry, qrz);
     qres.normalize();
     return qres;

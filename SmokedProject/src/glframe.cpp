@@ -6,10 +6,10 @@ GlFrame::GlFrame(QWidget *parent):GlWindow(parent)
     p_systems.push_back(ps);
     ps -> start();
 
-    //currentTime = Clock::now();
+    currentTime = Clock::now();
 
     g_Basis = new Basis( 10.0 );
-    //g_Camera = new Camera(0.0f, 5.0f, 30.0f, 4.0f/3.0f, 0.3f, 1000.0f, 60.0f);
+    g_Camera = new Camera(0.0f, 5.0f, 30.0f, 4.0f/3.0f, 0.3f, 1000.0f, 60.0f);
 }
 
 
@@ -20,8 +20,7 @@ GlFrame::~GlFrame()
 }
 
 
-bool
-GlFrame::initializeObjects()
+bool GlFrame::initializeObjects()
 {
     // Fond gris
     glClearColor( 0.2f, 0.2f, 0.2f, 1.0f );
@@ -57,18 +56,15 @@ GlFrame::initializeObjects()
 }
 
 
-void
-GlFrame::render()
+void GlFrame::render()
 {
-    //timeSinceLastFrame = timeInterval(currentTime, Clock::now());
-    //currentTime = Clock::now();
-
-    std::cout << "ha";
+    timeSinceLastFrame = timeInterval(currentTime, Clock::now());
+    currentTime = Clock::now();
 
     // Initialisation de la caméra
-//    pProjMatrix = g_Camera->getProjectionMatrix();
-//    pViewMatrix = g_Camera->getViewMatrix();
-    lookAt(0.0f, 5.0f, 30.0f, 4.0f/3.0f, 0.3f, 0.0f);
+    pProjMatrix = g_Camera->getProjectionMatrix();
+    pViewMatrix = g_Camera->getViewMatrix();
+    //lookAt(0.0f, 5.0f, 30.0f, 0, 0.0f, 0.0f);
 
 
     // Rendu des objets
@@ -92,52 +88,52 @@ GlFrame::render()
 }
 
 
-void
-GlFrame::mouseMoveEvent(QMouseEvent *event){
-//    if(event->MouseButtonRelease){
-//        oldMouseX = -1;
-//        oldMouseY = -1;
-//    }
+void GlFrame::mouseMoveEvent(QMouseEvent *event){
+    float disX = (event->globalX() - oldMouseX)/3000.0;
+    float disY = (event->globalY() - oldMouseY)/3000.0;
 
-//    else if(oldMouseX == -1 && oldMouseY == -1){
-//        oldMouseX = event->globalX();
-//        oldMouseY = event->globalY();
-//    }
+    cout << "Souris y " << disY << endl;
+    cout << "Souris x " << disX << endl;
 
-//    else{
-//        cout << "Souris X " << event->globalX();
-//        cout << "  Souris Y " << event->globalY() << "\n";
+    g_Camera -> rotateX(disY);
+    g_Camera -> rotateY(disX);
 
-//        g_Camera->rotateX(event->globalY() - oldMouseY);
-//        g_Camera->rotateY(event->globalX() - oldMouseX);
-
-//        oldMouseY = event->globalY();
-//        oldMouseX = event->globalX();
-//    }
-
+    oldMouseY = event->globalY();
+    oldMouseX = event->globalX();
 }
 
-void
-GlFrame::keyPressEvent( QKeyEvent* event )
+void GlFrame::mousePressEvent(QMouseEvent *event){
+    oldMouseX = event->globalX();
+    oldMouseY = event->globalY();
+    cout << "push" << endl;
+}
+
+void GlFrame::mouseReleaseEvent(QMouseEvent *e){
+    oldMouseX = -1;
+    oldMouseY = -1;
+    cout << "release" << endl;
+}
+
+void GlFrame::keyPressEvent( QKeyEvent* event )
 {
-//    switch( event->key())
-//    {
-//            case Qt::Key_Left:
-//                g_Camera->translateX(1.0/30 * timeSinceLastFrame);
-//                break;
+    switch( event->key())
+    {
+            case Qt::Key_Left:
+                g_Camera->translateX(1.0/30 * timeSinceLastFrame);
+                break;
 
-//            case Qt::Key_Right:
-//                g_Camera->translateX(1.0/30 * timeSinceLastFrame);
-//                break;
+            case Qt::Key_Right:
+                g_Camera->translateX(- 1.0/30 * timeSinceLastFrame);
+                break;
 
-//            case Qt::Key_Up:
-//                g_Camera->translateY(1.0/30 * timeSinceLastFrame);
-//                break;
+            case Qt::Key_Up:
+                g_Camera->translateY(- 1.0/30 * timeSinceLastFrame);
+                break;
 
-//            case Qt::Key_Down:
-//                g_Camera->translateY(1.0/30 * timeSinceLastFrame);
-//                break;
-//    }
+            case Qt::Key_Down:
+                g_Camera->translateY(1.0/30 * timeSinceLastFrame);
+                break;
+    }
 }
 
 void GlFrame::addParticleSystem(ParticleSystem *ps)

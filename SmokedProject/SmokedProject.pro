@@ -54,15 +54,31 @@ DISTFILES += \
     Shaders/color.fs \
     Shaders/color.vs \
     Shaders/PerVertex.fs \
-    Shaders/PerVertex.vs
-#    Shaders/Tornade.vs \
-#    Shaders/Tornade.fs \
-#    Shaders/Texture.vs \
-#    Shaders/Texture.fs \
-#    Shaders/Firework.vs \
-#    Shaders/Firework.fs \
-#    Shaders/DamierTexture.vs \
-#    Shaders/DamierTexture.fs \
-#    Shaders/Atome.vs \
-#    Shaders/Atome.fs
+    Shaders/PerVertex.vs \
+    Shaders/Tornade.vs \
+    Shaders/Tornade.fs \
+    Shaders/Texture.vs \
+    Shaders/Texture.fs \
+    Shaders/Firework.vs \
+    Shaders/Firework.fs \
+    Shaders/DamierTexture.vs \
+    Shaders/DamierTexture.fs \
+    Shaders/Atome.vs \
+    Shaders/Atome.fs
+
+OTHER_FILES += \
+    release/Shaders/Tornade.vs \
+    release/Shaders/Tornade.fs \
+    release/Shaders/Texture.vs \
+    release/Shaders/Texture.fs \
+    release/Shaders/PerVertex.vs \
+    release/Shaders/PerVertex.fs \
+    release/Shaders/Firework.vs \
+    release/Shaders/Firework.fs \
+    release/Shaders/DamierTexture.vs \
+    release/Shaders/DamierTexture.fs \
+    release/Shaders/color.vs \
+    release/Shaders/color.fs \
+    release/Shaders/Atome.vs \
+    release/Shaders/Atome.fs
 
