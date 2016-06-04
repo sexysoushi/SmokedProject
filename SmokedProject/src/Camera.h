@@ -27,14 +27,17 @@ public:
     void translateX(float shift);
     void translateY(float shift);
     void translateZ(float shift);
+
     void rotate(float angle, float ax, float ay, float az);
     void rotateX(float angle);
     void rotateY(float angle);
     void rotateZ(float angle);
-    const GLMatrix& getViewMatrix();
+
     void setAspectRatio(float ar);
     void setPlanes(float np, float fp);
     void setFOV(float angle);
+
+    const GLMatrix& getViewMatrix();
     const GLMatrix& getProjectionMatrix();
 
 protected:
