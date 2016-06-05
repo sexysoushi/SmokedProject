@@ -31,15 +31,12 @@ class GlFrame: public GlWindow
         QSize minimumSizeHint() const;
 
         void mousePressEvent(QMouseEvent *event);
-        void mouseReleaseEvent(QMouseEvent *event);
         void mouseMoveEvent(QMouseEvent *event);
         void keyPressEvent(QKeyEvent *e);
+        void mouseDoubleClickEvent(QMouseEvent *);
 
 private:
         std::vector<ParticleSystem*> p_systems;  
-
-        GLfloat angle1 = 0.0f;
-        GLfloat angle2 = 0.0f;
 
         Basis* g_Basis;
         Camera* g_Camera;
@@ -47,13 +44,18 @@ private:
         float timeSinceLastFrame;
         Clock::time_point currentTime;
 
-        float oldMouseX;
-        float oldMouseY;
+        QPoint lastPos;
 
+        float rotateSpeed;
+        float moveSpeed;
 
         float timeInterval(Clock::time_point start, Clock::time_point end){
             return std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         }
+
+        void lookat();
+        void rotateCamera(float angleY, float angleX);
+        void translateCamera(float forward, float right);
 };
 
 #endif // CAMERATEST_H

@@ -2,7 +2,7 @@
 #include <iostream>
 
 Camera::Camera(){
-    m_Orientation.set(1, 0, 1, 0);
+    m_Orientation.setFromAxis(1, 0, 0, 0);
     m_ViewMatrix = GLMatrix();
     m_ProjectionMatrix = GLMatrix();
 }
@@ -32,7 +32,6 @@ void Camera::translate(float x, float y, float z){
     m_position += tmpVec;
 }
 
-// TODO prendre en compte l'orientation !!!
 void Camera::translateX(float shift){
     m_position.x += shift;
 }
@@ -55,32 +54,29 @@ void Camera::rotate(float angle, float ax, float ay, float az){
     Quaternion tmpQuat = Quaternion();
     tmpQuat.setFromAxis(angle, tmpVect.x, tmpVect.y, tmpVect.z);
 
-    m_Orientation = tmpQuat * m_Orientation * tmpQuat.conjugate();
+    m_Orientation = tmpQuat * m_Orientation;
 }
 
 void Camera::rotateX(float angle){
     Quaternion tmpQuat = Quaternion();
     tmpQuat.setFromAxis(angle, 1.0f, 0.0f, 0.0f);
 
-    m_Orientation = tmpQuat * m_Orientation * tmpQuat.conjugate();
-
+    m_Orientation = tmpQuat * m_Orientation;
 }
 
 void Camera::rotateY(float angle){
     Quaternion tmpQuat = Quaternion();
     tmpQuat.setFromAxis(angle, 0.0f, 1.0f, 0.0f);
-    m_Orientation = tmpQuat * m_Orientation * tmpQuat.conjugate();
+    //std::cout << "ORI : " << m_Orientation.w << " ; " << m_Orientation.x << " ; " << m_Orientation.y << " ; " << m_Orientation.z << std::endl;
+    m_Orientation = tmpQuat * m_Orientation;
 }
 
 void Camera::rotateZ(float angle){
     Quaternion tmpQuat = Quaternion();
     tmpQuat.setFromAxis(angle, 0.0f, 0.0f, 1.0f);
 
-    m_Orientation = tmpQuat * m_Orientation * tmpQuat.conjugate();
+    m_Orientation = tmpQuat * m_Orientation;
 }
-
-
-
 
 GLMatrix const& Camera::getViewMatrix(){
     buildViewMatrix();
@@ -106,6 +102,16 @@ void Camera::setFOV(float angle){
 GLMatrix const& Camera::getProjectionMatrix(){
     buildProjectionMatrix();
     return m_ProjectionMatrix;
+}
+
+Quaternion Camera::getOrientation()
+{
+    return m_Orientation;
+}
+
+Vec3 Camera::getPosition()
+{
+    return m_position;
 }
 
 void Camera::buildProjectionMatrix(){

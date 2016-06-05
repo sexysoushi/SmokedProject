@@ -40,6 +40,9 @@ public:
     const GLMatrix& getViewMatrix();
     const GLMatrix& getProjectionMatrix();
 
+    Quaternion getOrientation();
+    Vec3 getPosition();
+
 protected:
     void buildViewMatrix();
     void buildProjectionMatrix();

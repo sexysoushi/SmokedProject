@@ -94,11 +94,10 @@ void Quaternion::normalize()
 
 void Quaternion::setFromAxis(float angle, float ax, float ay, float az)
 {
-    Quaternion qr;
-    qr.w = cos(angle/2.0);
-    qr.x = ax*sin(angle/2.0);
-    qr.y = ay*sin(angle/2.0);
-    qr.z = az*sin(angle/2.0);
+    w = cos(angle/2.0);
+    x = ax*sin(angle/2.0);
+    y = ay*sin(angle/2.0);
+    z = az*sin(angle/2.0);
 }
 
 //Quaternion Quaternion::slerp(const Quaternion& q1,const Quaternion& q2,float t)
@@ -128,21 +127,21 @@ void Quaternion::setFromAxis(float angle, float ax, float ay, float az)
 //}
 
 
-//void Quaternion::setRotationMatrix(float* mat){
-//    mat[0] = 1.0f - 2.0f*y*y - 2.0f*z*z;
-//    mat[1] = 2.0f*x*y + 2.0f*w*z;
-//    mat[2] = 2.0f*x*z - 2.0f*w*y;
-//    mat[3] = 0.0f;
-//    mat[4] = 2.0f*x*y - 2.0f*w*z;
-//    mat[5] = 1.0f - 2.0f*x*x - 2.0f*z*z;
-//    mat[6] = 2.0f*y*z + 2.0f*w*x;
-//    mat[7] = 0.0f;
-//    mat[8] = 2.0f*x*z + 2.0f*w*y;
-//    mat[9] = 2.0f*y*z - 2.0f*w*x;
-//    mat[10] = 1.0f - 2.0f*x*x - 2.0f*y*y;
-//    mat[11] = 0.0f;
-//    mat[12] = 0.0f;
-//    mat[13] = 0.0f;
-//    mat[14] = 0.0f;
-//    mat[15] = 1.0f;
-//}
+void Quaternion::setRotationMatrix(float* mat){
+    mat[0] = 1.0f - 2.0f*y*y - 2.0f*z*z;
+    mat[1] = 2.0f*x*y + 2.0f*w*z;
+    mat[2] = 2.0f*x*z - 2.0f*w*y;
+    mat[3] = 0.0f;
+    mat[4] = 2.0f*x*y - 2.0f*w*z;
+    mat[5] = 1.0f - 2.0f*x*x - 2.0f*z*z;
+    mat[6] = 2.0f*y*z + 2.0f*w*x;
+    mat[7] = 0.0f;
+    mat[8] = 2.0f*x*z + 2.0f*w*y;
+    mat[9] = 2.0f*y*z - 2.0f*w*x;
+    mat[10] = 1.0f - 2.0f*x*x - 2.0f*y*y;
+    mat[11] = 0.0f;
+    mat[12] = 0.0f;
+    mat[13] = 0.0f;
+    mat[14] = 0.0f;
+    mat[15] = 1.0f;
+}

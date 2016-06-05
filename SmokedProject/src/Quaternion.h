@@ -6,7 +6,7 @@
 
 class Quaternion
 {
-private:
+public:
     float x;
     float y;
     float z;
@@ -36,8 +36,7 @@ public:
 
     //float dot(const Quaternion& q) const;
     //Quaternion slerp(const Quaternion& q1, const Quaternion& q2, float t);
-    //void setRotationMatrix(float* mat);
-
+    void setRotationMatrix(float* mat);
 };
 
 #endif // QUATERNION_H
