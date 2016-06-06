@@ -67,7 +67,7 @@ void Camera::rotateX(float angle){
 void Camera::rotateY(float angle){
     Quaternion tmpQuat = Quaternion();
     tmpQuat.setFromAxis(angle, 0.0f, 1.0f, 0.0f);
-    //std::cout << "ORI : " << m_Orientation.w << " ; " << m_Orientation.x << " ; " << m_Orientation.y << " ; " << m_Orientation.z << std::endl;
+
     m_Orientation = tmpQuat * m_Orientation;
 }
 

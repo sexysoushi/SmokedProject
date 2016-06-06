@@ -35,7 +35,7 @@ class GlFrame: public GlWindow
         void keyPressEvent(QKeyEvent *e);
         void mouseDoubleClickEvent(QMouseEvent *);
 
-private:
+    private:
         std::vector<ParticleSystem*> p_systems;  
 
         Basis* g_Basis;
@@ -46,8 +46,8 @@ private:
 
         QPoint lastPos;
 
-        float rotateSpeed;
-        float moveSpeed;
+        float rotateSpeed;  // rad per ms
+        float moveSpeed;    // units per ms
 
         float timeInterval(Clock::time_point start, Clock::time_point end){
             return std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();

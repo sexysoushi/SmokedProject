@@ -61,33 +61,6 @@ bool GlFrame::initializeObjects()
 }
 
 
-void GlFrame::addParticleSystem(ParticleSystem *ps)
-{
-    if(ps != NULL)
-        p_systems.push_back(ps);
-    else
-        std::cout << "RETARD ALERT, CLASS !";
-}
-
-
-void GlFrame::clear()
-{
-    p_systems.clear();
-}
-
-
-QSize GlFrame::minimumSizeHint() const
-{
-    return QSize(300,300);
-}
-
-
-QSize GlFrame::sizeHint() const
-{
-    return QSize(1024,600);
-}
-
-
 void GlFrame::render()
 {
     timeSinceLastFrame = timeInterval(currentTime, Clock::now());
@@ -99,7 +72,7 @@ void GlFrame::render()
     pushMatrix();
 
         //useShader("color");
-        g_Basis->draw();
+        //g_Basis->draw();
 
         //std::cout << p_systems.size() << std::endl;
 
@@ -180,9 +153,6 @@ void GlFrame::mouseMoveEvent(QMouseEvent *event)
 
     rotateCamera(-disX, -disY);
 
-//    lastPos.setY(event->globalY());
-//    lastPos.setX(event->globalX());
-
     QPoint glob = mapToGlobal(QPoint(width()/2,height()/2));
     QCursor::setPos(glob);
     lastPos = QPoint(width()/2,height()/2);
@@ -197,6 +167,23 @@ void GlFrame::mousePressEvent(QMouseEvent *event)
 
     lastPos.setX(event->globalX());
     lastPos.setY(event->globalY());
+}
+
+
+
+void GlFrame::mouseDoubleClickEvent(QMouseEvent *)
+{
+    if(isFullScreen())
+    {
+        this->setWindowState(Qt::WindowNoState);
+        setCursor(Qt::ArrowCursor);
+
+    }
+    else
+    {
+        this->setWindowState(Qt::WindowFullScreen);
+        setCursor(Qt::BlankCursor);
+    }
 }
 
 
@@ -248,18 +235,29 @@ void GlFrame::keyPressEvent( QKeyEvent* event )
 }
 
 
-
-void GlFrame::mouseDoubleClickEvent(QMouseEvent *)
+void GlFrame::addParticleSystem(ParticleSystem *ps)
 {
-    if(isFullScreen())
-    {
-        this->setWindowState(Qt::WindowMaximized);
-        setCursor(Qt::ArrowCursor);
-
-    }
+    if(ps != NULL)
+        p_systems.push_back(ps);
     else
-    {
-        this->setWindowState(Qt::WindowFullScreen);
-        setCursor(Qt::BlankCursor);
-    }
+        std::cout << "ALERTE AU GOGOLE !";
 }
+
+
+void GlFrame::clear()
+{
+    p_systems.clear();
+}
+
+
+QSize GlFrame::minimumSizeHint() const
+{
+    return QSize(300,170);
+}
+
+
+QSize GlFrame::sizeHint() const
+{
+    return QSize(1024,600);
+}
+
