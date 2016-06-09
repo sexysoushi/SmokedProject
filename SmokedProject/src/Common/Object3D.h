@@ -13,7 +13,7 @@ protected:
         static void setFramework( AbstractFramework* );
 
 	public:
-		void draw();
+        void draw();
 
 	protected:
 		virtual void drawShape() = 0;

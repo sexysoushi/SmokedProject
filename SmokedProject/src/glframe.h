@@ -8,7 +8,6 @@
 #include <QSize>
 #include <iostream>
 #include <chrono>
-#include "QImageTest.h"
 #include "Skybox.h"
 
 using namespace std;
@@ -43,7 +42,6 @@ class GlFrame: public GlWindow
 
         Basis* g_Basis;
         Camera* g_Camera;
-        QImageTest* qit;
         Skybox* g_Skybox;
 
         float timeSinceLastFrame;

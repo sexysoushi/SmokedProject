@@ -33,7 +33,9 @@ HEADERS  += \
     src/Quaternion.h \
     src/Camera.h \
     src/mainwindow.h \
-    src/glframe.h
+    src/glframe.h \
+    src/Texture.h \
+    src/Skybox.h
 
 SOURCES += src/main.cpp\
     src/Common/GlFramework.cpp \
@@ -47,7 +49,9 @@ SOURCES += src/main.cpp\
     src/Quaternion.cpp \
     src/Camera.cpp \
     src/mainwindow.cpp \
-    src/glframe.cpp
+    src/glframe.cpp \
+    src/Texture.cpp \
+    src/Skybox.cpp
 
 
 DISTFILES += \
@@ -70,15 +74,33 @@ OTHER_FILES += \
     release/Shaders/Tornade.vs \
     release/Shaders/Tornade.fs \
     release/Shaders/Texture.vs \
-    release/Shaders/Texture.fs \
     release/Shaders/PerVertex.vs \
     release/Shaders/PerVertex.fs \
     release/Shaders/Firework.vs \
     release/Shaders/Firework.fs \
-    release/Shaders/DamierTexture.vs \
     release/Shaders/DamierTexture.fs \
     release/Shaders/color.vs \
     release/Shaders/color.fs \
     release/Shaders/Atome.vs \
-    release/Shaders/Atome.fs
+    release/Shaders/Atome.fs \
+    release/Shaders/Skybox.vs \
+    release/Shaders/Skybox.fs \
+    release/Shaders/Texture.fs \
+    release/Shaders/Water.vs \
+    release/Shaders/Water.fs \
+    release/Shaders/Tornade.vs \
+    release/Shaders/Tornade.fs \
+    release/Shaders/Liquid.vs \
+    release/Shaders/Liquid.fs \
+    release/Shaders/Firework.vs \
+    release/Shaders/Firework.fs \
+    release/Shaders/DamierTexture.fs \
+    release/Shaders/color.vs \
+    release/Shaders/color.fs \
+    release/Shaders/Basic.vs \
+    release/Shaders/Basic.fs \
+    release/Shaders/Atome.vs \
+    release/Shaders/Atome.fs \
+    release/Shaders/Smoke.fs \
+    release/Shaders/Smoke.vs
 

@@ -11,8 +11,6 @@ GlFrame::GlFrame(QWidget *parent):GlWindow(parent)
     g_Basis = new Basis( 10.0 );
     g_Camera = new Camera(0.0f, 5.0f, 30.0f, 16.0f/9.0f, 0.3f, 1000.0f, 60.0f);
     g_Skybox = new Skybox();
-    qit = new QImageTest();
-
 
     rotateSpeed = 0.001;
     moveSpeed = 1.0f / 30.0f;
@@ -26,7 +24,6 @@ GlFrame::~GlFrame()
     delete g_Basis;
     delete g_Camera;
     delete g_Skybox;
-    delete qit;
 }
 
 
@@ -38,17 +35,13 @@ bool GlFrame::initializeObjects()
     glEnable( GL_PROGRAM_POINT_SIZE );
 
     // Chargement des shaders
-    createShader( "Shaders/color" );
-    createShader( "Shaders/PerVertex" );
+    createShader( "Shaders/Basic" );
+    createShader( "Shaders/Smoke" );
+    createShader( "Shaders/Liquid" );
     createShader( "Shaders/Tornade" );
     createShader( "Shaders/Firework" );
     createShader( "Shaders/Atome" );
-    createShader( "Shaders/DamierTexture" );
-    createShader( "Shaders/Texture" );
-    createShader( "Shaders/Skybox" );
-
-    //chargement textures
-    qit->loadGLTextures();
+    //createShader( "Shaders/Skybox" );
 
     //charge skybox
     g_Skybox->loadGLTextures();
@@ -80,7 +73,7 @@ void GlFrame::render()
     popMatrix();
 
     //clos textures
-    qit->closeGLTextures();
+    //qit->closeGLTextures();
 
 }
 

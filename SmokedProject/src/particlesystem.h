@@ -1,10 +1,13 @@
 #ifndef PARTICLESYSTEM_H
 #define PARTICLESYSTEM_H
+
+
 #include "Common/GlFramework.h"
 #include "Common/Object3D.h"
 #include "Common/RandomNumberGenerator.h"
-//#include "Shapes/cube.h"
 #include "Common/Vectors.h"
+#include "Texture.h"
+
 #include <ctime>
 #include <chrono>
 #include <iostream>
@@ -31,12 +34,15 @@ private:
     int nbMax;
     float maxTimeAlive;
     float spread;
+    float pointSize;
 
     float speed;
     float gravity;
     vec3 down;
 
     bool started;
+
+    bool transparent;
 
     // particles array
     std::deque<Particle*> TabParticle;
@@ -46,9 +52,8 @@ private:
     float* velocities;
     float* ages;
 
-    char* shader;
-    QImage texture;
-    Vec2* texCoord;
+    std::string shader;
+    GLuint texId;
 
     // timers
     Clock::time_point first = std::chrono::steady_clock::now();
@@ -75,18 +80,22 @@ private:
 
 public:
     ParticleSystem();
-    ParticleSystem(float r, int n, float t, float s, float sp, float gr, vec3 d);
+    ParticleSystem(float r, int n, float t, float s, float sp, float gr, vec3 d, float p);
 
     ~ParticleSystem();
 
     void start();
     void stop();
 
+    void setShader(std::string s);
+    void loadTexture(char* t);
+    void setTransparent(bool b);
+
     bool isStarted();
 
     void clear();
 
-    //void draw();
+    void draw();
 
 protected:
     void drawShape();

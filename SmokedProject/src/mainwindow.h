@@ -30,10 +30,17 @@ class MainWindow : public QMainWindow
         QSlider* speedSlide;
         QSlider* gravitySlide;
         QSlider* spreadSlide;
+        QSlider* sizeSlide;
 
         QPushButton* addButton;
         QPushButton* clearButton;
 
+        QPushButton* waterButton;
+        QPushButton* lavaButton;
+        QPushButton* smokeButton;
+        QPushButton* fireworkButton;
+        QPushButton* atomButton;
+        QPushButton* tornadoButton;
 
         void keyPressEvent(QKeyEvent *event);
 
@@ -46,6 +53,13 @@ private slots:
         void initGL();
         void addParticleSystem();
         void clear();
+
+        void addWaterSystem();
+        void addLavaSystem();
+        void addSmokeSystem();
+        void addFireworkSystem();
+        void addAtomSystem();
+        void addTornadoSystem();
 };
 
 #endif // MAINWINDOW_H

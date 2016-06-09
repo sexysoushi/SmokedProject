@@ -169,7 +169,7 @@ GlFramework::createShader( const char* shader_prefix )
     if (vs_content == NULL)
     {
         return -1;
-//        QMessageBox::critical(this, trUtf8("Erreur"), trUtf8("Echec du chargement d'un shader\n"));
+        //QMessageBox::critical(this, trUtf8("Erreur"), trUtf8("Echec du chargement d'un shader\n"));
     }
 
     GLint status, logSize;

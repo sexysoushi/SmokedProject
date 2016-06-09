@@ -1,23 +1,17 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
-#include "Common/Object3D.h"
 
-class Texture : public Object3D
+//#include "Common/AbstractFramework.h"
+#include <GL/glew.h>
+#include <QGLWidget>
+#include <QImage>
+
+class Texture
 {
 public:
     Texture();
-    void initGLFrame();
-    void closeGLFrame();
-private:
-    GLint tc;
-protected:
-    unsigned char * image;
-    int imageWidth;
-    int imageHeight;
 
-    GLuint texID;
-    GLfloat texCoordinates[4*2];
-
+    static GLuint loadTexture(char* t);
 };
 
 #endif // TEXTURE_H

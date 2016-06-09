@@ -9,13 +9,13 @@ in vec3 color;
 
 uniform float speed;
 uniform float gravity;
-
+uniform float size;
 uniform vec3 down;
 
 uniform mat4 MVP;
-uniform mat4 MV;
 
 out vec3 fColor;
+out float fAge;
 
 const float g = 9.8f; // gravity
 
@@ -31,10 +31,12 @@ void main()
 
     gl_Position = MVP * vec4(np, 1.0f );
 
-    gl_PointSize = 10 - 2*age;
+    gl_PointSize = (10 - 2*age) * size;
 
     fColor = color;
     fColor.x = 4 - age;
     fColor.y = age / 2;
+
+    fAge = age;
 
 }

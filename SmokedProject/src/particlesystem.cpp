@@ -2,9 +2,9 @@
 #include <cmath>
 
 ParticleSystem::ParticleSystem()
-    : rate(1000),
+    : rate(400),
       nbMax(50000.0),
-      maxTimeAlive(3000.0),
+      maxTimeAlive(5000.0),
       started(false),
       spread(40),
       speed(8),
@@ -12,7 +12,8 @@ ParticleSystem::ParticleSystem()
       down(vec3{0.0f, -1.0f, 0.0f}),
       positions(NULL),
       velocities(NULL),
-      ages(NULL)
+      ages(NULL),
+      pointSize(1)
 {
     addParticle();
 
@@ -26,10 +27,12 @@ ParticleSystem::ParticleSystem()
 
     randomG.initSeed(clock());
 
-    shader = "PerVertex";
+    shader = "Basic";
+    texId = -1;
+    transparent = true;
 }
 
-ParticleSystem::ParticleSystem(float r, int n, float t, float s, float sp, float gr, vec3 d)
+ParticleSystem::ParticleSystem(float r, int n, float t, float s, float sp, float gr, vec3 d, float p)
     : rate(r),
       nbMax(n),
       maxTimeAlive(t),
@@ -40,9 +43,23 @@ ParticleSystem::ParticleSystem(float r, int n, float t, float s, float sp, float
       down(d),
       positions(NULL),
       velocities(NULL),
-      ages(NULL)
+      ages(NULL),
+      pointSize(p)
 {
-    ParticleSystem();
+    addParticle();
+
+    orientation.x = 0;
+    orientation.y = 1;
+    orientation.z = 0;
+
+    position.x = 0;
+    position.y = 0;
+    position.z = 0;
+
+    randomG.initSeed(clock());
+
+    shader = "Basic";
+    texId = -1;
 }
 
 ParticleSystem::~ParticleSystem(){
@@ -61,6 +78,20 @@ void ParticleSystem::stop()
 {
     started = false;
     clear();
+}
+
+void ParticleSystem::setShader(std::string c)
+{
+    shader = c;
+}
+
+void ParticleSystem::loadTexture(char *t)
+{
+    texId = Texture::loadTexture(t);
+}
+
+void ParticleSystem::setTransparent(bool b){
+    transparent = b;
 }
 
 bool ParticleSystem::isStarted(){
@@ -143,8 +174,6 @@ void ParticleSystem::deleteDeadParticles(){
 
 void ParticleSystem::buildArrays(){
 
-    //deleteDeadParticles();
-
     if(positions != NULL) delete positions;
     positions = new float[TabParticle.size()*3];
 
@@ -179,7 +208,10 @@ vec3 ParticleSystem::randomVector()
     float rAngle = randomG.getRandomNumber(spread) * M_PI/180.0f;
     float disAngle = randomG.getRandomNumber(2 * M_PI);
 
-    v.y = std::cos(rAngle);
+    if(shader == "Firework")
+        v.y = rAngle*std::cos(disAngle);
+    else
+        v.y = std::cos(rAngle);
     v.x = rAngle*std::cos(disAngle);
     v.z = rAngle*std::sin(disAngle);
 
@@ -207,37 +239,42 @@ float ParticleSystem::timeInterval(Clock::time_point start, Clock::time_point en
 
 // TODO RANDOM VECTOR IN SHADER
 
-//void ParticleSystem::draw()
-//{
-//    if (m_Framework->useShader( shader ))
-//    {
-//        m_Framework->computeAncillaryMatrices();
-//        GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
-//        m_Framework->transmitMVP( var_id );
+void ParticleSystem::draw()
+{
+    if (m_Framework->useShader( (char*)shader.c_str() ))
+    {
+        m_Framework->computeAncillaryMatrices();
+        GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
+        m_Framework->transmitMVP( var_id );
 
-//        drawShape();
-//    }
-//}
+        drawShape();
+    }
+}
 
 
 void ParticleSystem::drawShape()
 {
-    if(!started)
-        return;
-
     //std::cout<<TabParticle.size()<<std::endl;
     updateTime();
     buildArrays();
 
+    if(transparent)
+        glDisable(GL_DEPTH_TEST);
+
+    if(!isStarted())
+        return;
+
     GLuint s = glGetUniformLocation(m_Framework->getCurrentShaderId(), "speed");
     glUniform1f(s, speed);
+
+    GLuint ps = glGetUniformLocation(m_Framework->getCurrentShaderId(), "size");
+    glUniform1f(ps, pointSize);
 
     GLuint g = glGetUniformLocation(m_Framework->getCurrentShaderId(), "gravity");
     glUniform1f(g, gravity);
 
     GLuint d = glGetUniformLocation(m_Framework->getCurrentShaderId(), "down");
     glUniform3f(d, down.x, down.y, down.z);
-
 
     GLint p = glGetAttribLocation( m_Framework->getCurrentShaderId(), "position" );
     glEnableVertexAttribArray( p );
@@ -249,18 +286,31 @@ void ParticleSystem::drawShape()
     glEnableVertexAttribArray( a );
 
     GLint t = glGetAttribLocation( m_Framework->getCurrentShaderId(), "tc" );
-    //glEnable();
 
     glVertexAttribPointer( p, 3, GL_FLOAT, GL_FALSE, 0, positions );
     glVertexAttribPointer( v, 3, GL_FLOAT, GL_TRUE, 0, velocities );
     glVertexAttribPointer( a, 1, GL_FLOAT, GL_FALSE, 0, ages );
-    glVertexAttribPointer( t, 2, GL_FLOAT, GL_FALSE, 0, texCoord );
 
-    glDrawArrays(GL_POINTS,0, TabParticle.size());
+    if(texId != -1)
+    {
+        glEnable(GL_POINT_SPRITE);
+        glUniform1i(texId,0);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texId);
+        glEnable(GL_TEXTURE_2D);
+        glDrawArrays(GL_POINTS,0, TabParticle.size());
+        glDisable(GL_TEXTURE_2D);
+    }
+    else
+        glDrawArrays(GL_POINTS,0, TabParticle.size());
 
     glDisableVertexAttribArray( v );
     glDisableVertexAttribArray( p );
     glDisableVertexAttribArray( a );
     glDisableVertexAttribArray( t );
+
+    if(transparent)
+        glEnable(GL_DEPTH_TEST);
+
 }
 

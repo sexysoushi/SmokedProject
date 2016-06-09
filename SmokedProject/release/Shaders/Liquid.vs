@@ -19,14 +19,19 @@ out vec3 fColor;
 
 const float g = 9.8f; // gravity
 
-void main(void)
+void main()
 {
-    float x = cos(speed*age)*sin(age);
-    float y = cos(speed*age)*cos(age);
-    float z = sin(speed*age)*sin(age); 
 
-    gl_Position = MVP* vec4(x, y, z, 1.0);
-    gl_PointSize = 3.0 * size;
+    vec3 np;
+    // initial velocity * time
+    np = position + speed * velocity * age;
+
+    // gravity following down vector
+    np = np + down * gravity * age * age;
+
+    gl_Position = MVP * vec4(np, 1.0f );
+
+    gl_PointSize = (10 - 2*age) * size;
 
     fColor = color;
     fColor.x = 4 - age;

@@ -9,7 +9,7 @@ in vec3 color;
 
 uniform float speed;
 uniform float gravity;
-
+uniform float size;
 uniform vec3 down;
 
 uniform mat4 MVP;
@@ -31,7 +31,7 @@ void main()
 
     gl_Position = MVP * vec4(np, 1.0f );
 
-    gl_PointSize = (30*age)/10;
+    gl_PointSize = size * (30*age)/10;
 
     fColor = color;
     fColor.x = 270*age;
