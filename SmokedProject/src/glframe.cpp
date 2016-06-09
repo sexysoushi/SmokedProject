@@ -74,8 +74,6 @@ void GlFrame::render()
         //useShader("color");
         //g_Basis->draw();
 
-        //std::cout << p_systems.size() << std::endl;
-
         //useShader("PerVertex");
         for(unsigned int i=0; i<p_systems.size(); i++){
             pushMatrix();

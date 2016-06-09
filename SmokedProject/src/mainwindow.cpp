@@ -42,9 +42,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QVBoxLayout* topLayout = new QVBoxLayout();
 
-//    QVSlideLayout* left = new QVSlideLayout();
-//    QVSlideLayout* right = new QVSlideLayout();
-
     addLabel(topLayout, "rate:");
     topLayout->addWidget(rateSlide);
 
@@ -66,10 +63,6 @@ MainWindow::MainWindow(QWidget *parent) :
     topLayout->addWidget(addButton);
 
     topLayout->addWidget(clearButton);
-
-
-//    topLayout->addLayout(left);
-//    topLayout->addLayout(right);
 
     QWidget* topWidget = new QWidget();
     topWidget->setLayout(topLayout);

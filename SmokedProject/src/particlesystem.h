@@ -24,6 +24,7 @@ class ParticleSystem : public Object3D
 {
 
 private:
+    // particle system parameters
     vec3 position;
     vec3 orientation;
     float rate;
@@ -37,14 +38,18 @@ private:
 
     bool started;
 
-    float disAngle;
-
+    // particles array
     std::deque<Particle*> TabParticle;
 
+    // GL data
     float* positions;
     float* velocities;
     float* ages;
 
+    char* shader;
+    QImage texture;
+
+    // timers
     Clock::time_point first = std::chrono::steady_clock::now();
     Clock::time_point lastTrigger = first;
     Clock::time_point currentTime = first;
@@ -52,6 +57,7 @@ private:
     float timeSinceLastFrame;
 
     RandomNumberGenerator randomG;
+
 
     void particleMotion(Particle* particle);
     void addParticle();
@@ -63,46 +69,23 @@ private:
     float timeInterval(Clock::time_point start, Clock::time_point end);
 
     void deleteDeadParticles();
+    void updateTime();
+
 
 public:
     ParticleSystem();
     ParticleSystem(float r, int n, float t, float s, float sp, float gr, vec3 d);
-    ParticleSystem(ParticleSystem* p);
 
     ~ParticleSystem();
 
     void start();
     void stop();
 
-    void updateTime();
-
     bool isStarted();
-
-    void lockMutex();
-    void unlockMutex();
 
     void clear();
 
-    void setRate(double r);
-    float getRate() const;
-
-    int getNbMax() const;
-    void setNbMax(int value);
-
-    float getMaxTimeAlive() const;
-    void setMaxTimeAlive(float value);
-
-    float getSpread() const;
-    void setSpread(float value);
-
-    float getSpeed() const;
-    float setSpeed(float value);
-
-    float getGravity() const;
-    float setGravity(float value);
-
-    vec3 getDown() const;
-    void setDown(vec3 v);
+    //void draw();
 
 protected:
     void drawShape();

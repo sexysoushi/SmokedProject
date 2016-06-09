@@ -24,10 +24,9 @@ ParticleSystem::ParticleSystem()
     position.y = 0;
     position.z = 0;
 
-    disAngle=0;
-
     randomG.initSeed(clock());
-    //g_cube = new Cube(1.0);
+
+    shader = "PerVertex";
 }
 
 ParticleSystem::ParticleSystem(float r, int n, float t, float s, float sp, float gr, vec3 d)
@@ -43,25 +42,8 @@ ParticleSystem::ParticleSystem(float r, int n, float t, float s, float sp, float
       velocities(NULL),
       ages(NULL)
 {
-    addParticle();
-
-    orientation.x = 0;
-    orientation.y = 1;
-    orientation.z = 0;
-
-    position.x = 0;
-    position.y = 0;
-    position.z = 0;
-
-    disAngle=0;
-
-    randomG.initSeed(clock());
-    //g_cube = new Cube(1.0);
+    ParticleSystem();
 }
-
-ParticleSystem::ParticleSystem(ParticleSystem *p)
-    :ParticleSystem(p->getRate(), p->getNbMax(), p->getMaxTimeAlive(), p->getSpread(), p->getSpeed(), p->getGravity(), p->getDown())
-{}
 
 ParticleSystem::~ParticleSystem(){
     if(positions = NULL) delete positions;
@@ -85,15 +67,6 @@ bool ParticleSystem::isStarted(){
     return started;
 }
 
-
-void ParticleSystem::lockMutex(){
-    //mut->lock();
-}
-
-void ParticleSystem::unlockMutex(){
-    //mut->unlock();
-}
-
 void ParticleSystem::clear()
 {
     TabParticle.clear();
@@ -113,75 +86,6 @@ void ParticleSystem::clear()
         delete ages;
         ages = NULL;
     }
-}
-
-void ParticleSystem::setRate(double r){
-    nbMax = r;
-}
-
-float ParticleSystem::getRate() const
-{
-    return rate;
-}
-
-
-int ParticleSystem::getNbMax() const
-{
-    return nbMax;
-}
-
-void ParticleSystem::setNbMax(int value)
-{
-    nbMax = value;
-}
-
-float ParticleSystem::getMaxTimeAlive() const
-{
-    return maxTimeAlive;
-}
-
-void ParticleSystem::setMaxTimeAlive(float value)
-{
-    maxTimeAlive = value;
-}
-
-float ParticleSystem::getSpread() const
-{
-    return spread;
-}
-
-void ParticleSystem::setSpread(float value)
-{
-    spread = value;
-}
-
-float ParticleSystem::getSpeed() const
-{
-    return speed;
-}
-
-float ParticleSystem::setSpeed(float value)
-{
-    speed = value;
-}
-
-float ParticleSystem::getGravity() const
-{
-    return gravity;
-}
-
-float ParticleSystem::setGravity(float value)
-{
-    gravity = value;
-}
-
-vec3 ParticleSystem::getDown() const
-{
-    return down;
-}
-
-void ParticleSystem::setDown(vec3 v){
-    down = v;
 }
 
 // life and death of particles
@@ -302,6 +206,19 @@ float ParticleSystem::timeInterval(Clock::time_point start, Clock::time_point en
 //}
 
 // TODO RANDOM VECTOR IN SHADER
+
+//void ParticleSystem::draw()
+//{
+//    if (m_Framework->useShader( shader ))
+//    {
+//        m_Framework->computeAncillaryMatrices();
+//        GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
+//        m_Framework->transmitMVP( var_id );
+
+//        drawShape();
+//    }
+//}
+
 
 void ParticleSystem::drawShape()
 {
