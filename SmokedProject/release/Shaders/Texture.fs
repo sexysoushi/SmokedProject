@@ -1,16 +1,13 @@
-#version 130
+#version 140
 
-in vec4 color;
-in vec2 texCoord;
+in vec3 fColor;
+
 uniform sampler2D texId;
 
-
-out vec4 fColor;
+out vec4 fragColor;
 
 void main()
 {
-   int n = 0;
-   //Lidentifiant de l'unite de texture n (avec n = 0, 1, NBR_TEXTURES-1)
-   glUniform1i( glGetUniformLocation( 0, "texId" ), n ) ;
-   fColor = color;
+
+  fragColor = texture2D(texId, gl_PointCoord);
 }
