@@ -12,11 +12,10 @@ class Skybox : public Object3D
 public:
     Skybox();
     void drawSkybox();
-
+    void loadGLTextures();
 
 protected:
     void drawShape();
-    void loadGLTextures();
 
 private:
     //texture top

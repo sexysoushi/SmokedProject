@@ -88,10 +88,6 @@ void Skybox::drawShape()
 void
 Skybox::drawSkybox()
 {
-    //chargement des textures
-    loadGLTextures();
-
-
     if (m_Framework->useShader( "Skybox" ))
     {
         m_Framework->computeAncillaryMatrices();

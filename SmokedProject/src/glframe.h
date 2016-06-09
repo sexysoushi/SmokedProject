@@ -8,6 +8,8 @@
 #include <QSize>
 #include <iostream>
 #include <chrono>
+#include "QImageTest.h"
+#include "Skybox.h"
 
 using namespace std;
 
@@ -34,12 +36,15 @@ class GlFrame: public GlWindow
         void mouseMoveEvent(QMouseEvent *event);
         void keyPressEvent(QKeyEvent *e);
         void mouseDoubleClickEvent(QMouseEvent *);
+        void wheelEvent( QWheelEvent* );
 
     private:
         std::vector<ParticleSystem*> p_systems;  
 
         Basis* g_Basis;
         Camera* g_Camera;
+        QImageTest* qit;
+        Skybox* g_Skybox;
 
         float timeSinceLastFrame;
         Clock::time_point currentTime;

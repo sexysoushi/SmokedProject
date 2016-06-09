@@ -10,6 +10,9 @@ GlFrame::GlFrame(QWidget *parent):GlWindow(parent)
 
     g_Basis = new Basis( 10.0 );
     g_Camera = new Camera(0.0f, 5.0f, 30.0f, 16.0f/9.0f, 0.3f, 1000.0f, 60.0f);
+    g_Skybox = new Skybox();
+    qit = new QImageTest();
+
 
     rotateSpeed = 0.001;
     moveSpeed = 1.0f / 30.0f;
@@ -22,6 +25,8 @@ GlFrame::~GlFrame()
 {
     delete g_Basis;
     delete g_Camera;
+    delete g_Skybox;
+    delete qit;
 }
 
 
@@ -39,23 +44,14 @@ bool GlFrame::initializeObjects()
     createShader( "Shaders/Firework" );
     createShader( "Shaders/Atome" );
     createShader( "Shaders/DamierTexture" );
+    createShader( "Shaders/Texture" );
+    createShader( "Shaders/Skybox" );
 
-    // Chargement des textures
-    const int NBR_TEXTURES = 2;
-    GLuint texId[NBR_TEXTURES];
-    glGenTextures( NBR_TEXTURES, texId );
-    // Initialisation de la première texture stockée dans l'unité de texture #0
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, texId[0] );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    //glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, texture1_width, texture1_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tab_texture1 );
-    // Initialisation de la seconde texture stockée dans l'unité de texture #1
-    glActiveTexture( GL_TEXTURE1 );
-    glBindTexture( GL_TEXTURE_2D, texId[1] );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    //glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, texture2_width, texture2_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tab_texture2 );
+    //chargement textures
+    qit->loadGLTextures();
+
+    //charge skybox
+    g_Skybox->loadGLTextures();
 
     return true;
 }
@@ -70,7 +66,6 @@ void GlFrame::render()
 
     // Rendu des objets
     pushMatrix();
-
         //useShader("color");
         //g_Basis->draw();
 
@@ -83,6 +78,9 @@ void GlFrame::render()
         }
 
     popMatrix();
+
+    //clos textures
+    qit->closeGLTextures();
 
 }
 
@@ -184,7 +182,14 @@ void GlFrame::mouseDoubleClickEvent(QMouseEvent *)
     }
 }
 
-
+void
+GlFrame::wheelEvent( QWheelEvent* event )
+{
+    if(event->delta() > 0)
+        translateCamera(-moveSpeed * timeSinceLastFrame, 0);
+    else
+       translateCamera(moveSpeed * timeSinceLastFrame, 0);
+}
 
 void GlFrame::keyPressEvent( QKeyEvent* event )
 {
