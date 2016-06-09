@@ -331,14 +331,19 @@ void ParticleSystem::drawShape()
     GLint a = glGetAttribLocation( m_Framework->getCurrentShaderId(), "age" );
     glEnableVertexAttribArray( a );
 
+    GLint t = glGetAttribLocation( m_Framework->getCurrentShaderId(), "tc" );
+    //glEnable();
+
     glVertexAttribPointer( p, 3, GL_FLOAT, GL_FALSE, 0, positions );
     glVertexAttribPointer( v, 3, GL_FLOAT, GL_TRUE, 0, velocities );
     glVertexAttribPointer( a, 1, GL_FLOAT, GL_FALSE, 0, ages );
+    glVertexAttribPointer( t, 2, GL_FLOAT, GL_FALSE, 0, texCoord );
 
-    glDrawArrays(GL_POINTS,0,TabParticle.size());
+    glDrawArrays(GL_POINTS,0, TabParticle.size());
 
     glDisableVertexAttribArray( v );
     glDisableVertexAttribArray( p );
     glDisableVertexAttribArray( a );
+    glDisableVertexAttribArray( t );
 }
 

@@ -4,19 +4,19 @@
 #include "Common/Object3D.h"
 #include "Common/RandomNumberGenerator.h"
 //#include "Shapes/cube.h"
-
+#include "Common/Vectors.h"
 #include <ctime>
 #include <chrono>
 #include <iostream>
 #include <deque>
+#include <QImage>
+#include <QGLWidget>
 
 typedef std::chrono::steady_clock Clock;
 
 struct Particle{
     vec3   position;
     vec3   velocity; // vitesse orientée sur un axe
-    //vec3   color;    // couleur de la particule
-    //double size;     // taille de la particule
     Clock::time_point startTime;
 };
 
@@ -44,6 +44,8 @@ private:
     float* positions;
     float* velocities;
     float* ages;
+
+    Vec2* texCoord;
 
     Clock::time_point first = std::chrono::steady_clock::now();
     Clock::time_point lastTrigger = first;
