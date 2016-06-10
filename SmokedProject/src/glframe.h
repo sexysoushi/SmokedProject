@@ -10,8 +10,6 @@
 #include <chrono>
 #include "Skybox.h"
 
-using namespace std;
-
 // typedef std::chrono::steady_clock Clock;
 
 class GlFrame: public GlWindow
@@ -31,32 +29,37 @@ class GlFrame: public GlWindow
         QSize sizeHint() const;
         QSize minimumSizeHint() const;
 
-        void mousePressEvent(QMouseEvent *event);
+        // event handlers;
         void mouseMoveEvent(QMouseEvent *event);
         void keyPressEvent(QKeyEvent *e);
         void mouseDoubleClickEvent(QMouseEvent *);
         void wheelEvent( QWheelEvent* );
 
     private:
-        std::vector<ParticleSystem*> p_systems;  
+        std::vector<ParticleSystem*> m_systems;
 
-        Basis* g_Basis;
-        Camera* g_Camera;
-        Skybox* g_Skybox;
+        // 3D objects
+        Basis* m_Basis;
+        Camera* m_Camera;
+        Skybox* m_Skybox;
 
-        float timeSinceLastFrame;
-        Clock::time_point currentTime;
+        // time handlers
+        float m_timeSinceLastFrame;
+        Clock::time_point m_currentTime;
 
-        QPoint lastPos;
+        // mouse position
+        QPoint m_lastPos;
 
-        float rotateSpeed;  // rad per ms
-        float moveSpeed;    // units per ms
+        // speeds
+        float m_rotateSpeed;  // rad per ms
+        float m_moveSpeed;    // units per ms
 
         float timeInterval(Clock::time_point start, Clock::time_point end){
             return std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         }
 
-        void lookat();
+        // camera operations
+        void applyCameraTransformations();
         void rotateCamera(float angleY, float angleX);
         void translateCamera(float forward, float right);
 };

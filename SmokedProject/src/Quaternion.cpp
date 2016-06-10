@@ -1,5 +1,9 @@
 #include "Quaternion.h"
 
+///////// PUBLIC //////////
+
+/****** LIFE CYCLE *****/
+
 Quaternion::~Quaternion(){}
 
 Quaternion Quaternion::operator+(const Quaternion& q)
@@ -8,16 +12,16 @@ Quaternion Quaternion::operator+(const Quaternion& q)
     return qres;
 }
 
-//float Quaternion::dot(const Quaternion& q) const
-//{
-//    float qx = q.x;
-//    float qy = q.y;
-//    float qz = q.z;
-//    float qw = q.w;
+/***** Operators override *****/
 
-//    return qx*x + qy*y + qz*z + qw*w;
-//}
+// product with scalar
+Quaternion Quaternion::operator*(float f)
+{
+    Quaternion q(f*w, f*x, f*y, f*z);
+    return q;
+}
 
+// product with vector
 Vec3 Quaternion::operator*(const Vec3& v)
 {
     Quaternion u = Quaternion(0,v.x, v.y, v.z);
@@ -29,6 +33,8 @@ Vec3 Quaternion::operator*(const Vec3& v)
     res.z = temp.z;
     return res;
 }
+
+// products with quaternion
 
 Quaternion Quaternion::operator*(const Quaternion& q)
 {
@@ -63,6 +69,9 @@ Quaternion& Quaternion::operator*=(const Quaternion& q)
     return *this;
 }
 
+
+/************ SETTERS ***********/
+
 void Quaternion::set(float qw, float qx, float qy, float qz)
 {
     w=qw;
@@ -71,16 +80,48 @@ void Quaternion::set(float qw, float qx, float qy, float qz)
     z=qz;
 }
 
-Quaternion Quaternion ::conjugate()
+///
+/// \brief Quaternion::setFromAxis
+///     Sets the quaternion from its rotation axis and angle
+///     Axis should be normalized
+/// \param angle
+/// \param ax
+/// \param ay
+/// \param az
+///
+void Quaternion::setFromAxis(float angle, float ax, float ay, float az)
 {
-    return Quaternion(w, -x, -y, -z);
+    w = cos(angle/2.0);
+    x = ax*sin(angle/2.0);
+    y = ay*sin(angle/2.0);
+    z = az*sin(angle/2.0);
+}
+
+void Quaternion::setRotationMatrix(float* mat){
+    mat[0] = 1.0f - 2.0f*y*y - 2.0f*z*z;
+    mat[1] = 2.0f*x*y + 2.0f*w*z;
+    mat[2] = 2.0f*x*z - 2.0f*w*y;
+    mat[3] = 0.0f;
+    mat[4] = 2.0f*x*y - 2.0f*w*z;
+    mat[5] = 1.0f - 2.0f*x*x - 2.0f*z*z;
+    mat[6] = 2.0f*y*z + 2.0f*w*x;
+    mat[7] = 0.0f;
+    mat[8] = 2.0f*x*z + 2.0f*w*y;
+    mat[9] = 2.0f*y*z - 2.0f*w*x;
+    mat[10] = 1.0f - 2.0f*x*x - 2.0f*y*y;
+    mat[11] = 0.0f;
+    mat[12] = 0.0f;
+    mat[13] = 0.0f;
+    mat[14] = 0.0f;
+    mat[15] = 1.0f;
 }
 
 
-Quaternion Quaternion::operator*(float f)
+/********** OPERATIONS **********/
+
+Quaternion Quaternion::conjugate()
 {
-    Quaternion q(f*w, f*x, f*y, f*z);
-    return q;
+    return Quaternion(w, -x, -y, -z);
 }
 
 void Quaternion::normalize()
@@ -92,13 +133,15 @@ void Quaternion::normalize()
     z /= magnitude;
 }
 
-void Quaternion::setFromAxis(float angle, float ax, float ay, float az)
-{
-    w = cos(angle/2.0);
-    x = ax*sin(angle/2.0);
-    y = ay*sin(angle/2.0);
-    z = az*sin(angle/2.0);
-}
+//float Quaternion::dot(const Quaternion& q) const
+//{
+//    float qx = q.x;
+//    float qy = q.y;
+//    float qz = q.z;
+//    float qw = q.w;
+
+//    return qx*x + qy*y + qz*z + qw*w;
+//}
 
 //Quaternion Quaternion::slerp(const Quaternion& q1,const Quaternion& q2,float t)
 //{
@@ -125,23 +168,3 @@ void Quaternion::setFromAxis(float angle, float ax, float ay, float az)
 //    qr.normalize();
 //    return qr;
 //}
-
-
-void Quaternion::setRotationMatrix(float* mat){
-    mat[0] = 1.0f - 2.0f*y*y - 2.0f*z*z;
-    mat[1] = 2.0f*x*y + 2.0f*w*z;
-    mat[2] = 2.0f*x*z - 2.0f*w*y;
-    mat[3] = 0.0f;
-    mat[4] = 2.0f*x*y - 2.0f*w*z;
-    mat[5] = 1.0f - 2.0f*x*x - 2.0f*z*z;
-    mat[6] = 2.0f*y*z + 2.0f*w*x;
-    mat[7] = 0.0f;
-    mat[8] = 2.0f*x*z + 2.0f*w*y;
-    mat[9] = 2.0f*y*z - 2.0f*w*x;
-    mat[10] = 1.0f - 2.0f*x*x - 2.0f*y*y;
-    mat[11] = 0.0f;
-    mat[12] = 0.0f;
-    mat[13] = 0.0f;
-    mat[14] = 0.0f;
-    mat[15] = 1.0f;
-}

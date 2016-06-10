@@ -1,19 +1,23 @@
 #include "glframe.h"
 
+/////////// PUBLIC /////////////
+
+/***** LIFE CYCLE *****/
+
 GlFrame::GlFrame(QWidget *parent):GlWindow(parent)
 {
     ParticleSystem* ps = new ParticleSystem();
-    p_systems.push_back(ps);
+    m_systems.push_back(ps);
     ps -> start();
 
-    currentTime = Clock::now();
+    m_currentTime = Clock::now();
 
-    g_Basis = new Basis( 10.0 );
-    g_Camera = new Camera(0.0f, 5.0f, 30.0f, 16.0f/9.0f, 0.3f, 1000.0f, 60.0f);
-    g_Skybox = new Skybox();
+    m_Basis = new Basis( 10.0 );
+    m_Camera = new Camera(0.0f, 5.0f, 30.0f, 16.0f/9.0f, 0.3f, 1000.0f, 60.0f);
+    m_Skybox = new Skybox();
 
-    rotateSpeed = 0.001;
-    moveSpeed = 1.0f / 30.0f;
+    m_rotateSpeed = 0.001;
+    m_moveSpeed = 1.0f / 30.0f;
 
     setMouseTracking(true);
 }
@@ -21,9 +25,9 @@ GlFrame::GlFrame(QWidget *parent):GlWindow(parent)
 
 GlFrame::~GlFrame()
 {
-    delete g_Basis;
-    delete g_Camera;
-    delete g_Skybox;
+    delete m_Basis;
+    delete m_Camera;
+    delete m_Skybox;
 }
 
 
@@ -44,47 +48,74 @@ bool GlFrame::initializeObjects()
     //createShader( "Shaders/Skybox" );
 
     //charge skybox
-    g_Skybox->loadGLTextures();
+    m_Skybox->loadGLTextures();
 
     return true;
 }
 
-
+////
+/// \brief GlFrame::render
+/// Rendering function to be called at each frame
+///
 void GlFrame::render()
 {
-    timeSinceLastFrame = timeInterval(currentTime, Clock::now());
-    currentTime = Clock::now();
+    m_timeSinceLastFrame = timeInterval(m_currentTime, Clock::now());
+    m_currentTime = Clock::now();
 
-    lookat();
+    applyCameraTransformations();
 
     // Rendu des objets
     pushMatrix();
         //useShader("color");
         //g_Basis->draw();
 
-        //useShader("PerVertex");
-        for(unsigned int i=0; i<p_systems.size(); i++){
+        for(unsigned int i=0; i<m_systems.size(); i++){
             pushMatrix();
             //translate(i, 0, 0);
-            p_systems[i]->draw();
+            m_systems[i]->draw();
             popMatrix();
         }
 
     popMatrix();
-
-    //clos textures
-    //qit->closeGLTextures();
-
 }
 
+/****** OPERATIONS *****/
 
-void GlFrame::lookat()
+///
+/// \brief GlFrame::addParticleSystem
+///      Adds a previously instanciated particle system to the list of systems to be rendered
+///
+/// \param ps An allocated particle system pointer
+///
+void GlFrame::addParticleSystem(ParticleSystem *ps)
 {
-    pProjMatrix = g_Camera->getProjectionMatrix();
-    pViewMatrix = g_Camera->getViewMatrix();
+    if(ps != NULL)
+        m_systems.push_back(ps);
+    else
+        std::cout << "ALERTE AU GOGOLE !";
+}
 
-    Vec3 pos = g_Camera->getPosition();
-    Quaternion rot = g_Camera->getOrientation();
+///
+/// \brief GlFrame::clear
+///     Clears the list of particle systems
+///
+void GlFrame::clear()
+{
+    m_systems.clear();
+}
+
+///
+/// \brief GlFrame::applyCameraTransformations
+///     Apply camera transforms from current orientation
+///     This is called at every frame in the rendering loop
+///
+void GlFrame::applyCameraTransformations()
+{
+    pProjMatrix = m_Camera->getProjectionMatrix();
+    pViewMatrix = m_Camera->getViewMatrix();
+
+    Vec3 pos = m_Camera->getPosition();
+    Quaternion rot = m_Camera->getOrientation();
 
     Quaternion q_lookat = rot * Quaternion(0.0f, 0.0f, 0.0f, -1.0f) * rot.conjugate();
     q_lookat.normalize();
@@ -98,22 +129,31 @@ void GlFrame::lookat()
     lookAt(pos.x, pos.y, pos.z, pos.x + q_lookat.x, pos.y + q_lookat.y, pos.z + q_lookat.z, q_up.x, q_up.y, q_up.z);
 }
 
-
-
+///
+/// \brief GlFrame::rotateCamera
+///     Rotates the camera around X and Y axis
+/// \param angleY radians
+/// \param angleX radians
+///
 void GlFrame::rotateCamera(float angleY, float angleX)
 {
-    g_Camera -> rotateY(angleY);
+    m_Camera -> rotateY(angleY);
 
-    Quaternion rot = g_Camera->getOrientation();
+    Quaternion rot = m_Camera->getOrientation();
     Quaternion q_side = rot * Quaternion(0.0f, 1.0f, 0.0f, 0.0f) * rot.conjugate();
-    g_Camera -> rotate(angleX, q_side.x, q_side.y, q_side.z);
+    m_Camera -> rotate(angleX, q_side.x, q_side.y, q_side.z);
 }
 
 
-
+///
+/// \brief GlFrame::translateCamera
+///     Translates camera along X and Z axis
+/// \param forward gl units
+/// \param right gl units
+///
 void GlFrame::translateCamera(float forward, float right)
 {
-    Quaternion rot = g_Camera->getOrientation();
+    Quaternion rot = m_Camera->getOrientation();
 
     Quaternion q_forward = rot * Quaternion(0.0f, 0.0f, 0.0f, -1.0f) * rot.conjugate();
     q_forward.normalize();
@@ -125,17 +165,25 @@ void GlFrame::translateCamera(float forward, float right)
     float y = forward * q_forward.y + right * q_right.y;
     float z = forward * q_forward.z + right * q_right.z;
 
-    g_Camera->translate(x, y, z);
+    m_Camera->translate(x, y, z);
 }
 
 
+///////////// PROTECTED /////////////
 
+/***** EVENT HANDLERS *****/
+
+///
+/// \brief GlFrame::mouseMoveEvent
+///     Rotate camera with mouse when in fullscreen mode
+/// \param event
+///
 void GlFrame::mouseMoveEvent(QMouseEvent *event)
 {    if(!isFullScreen())
         return;
 
-    float disX = (event->globalX() - lastPos.x()) * rotateSpeed;
-    float disY = (event->globalY() - lastPos.y()) * rotateSpeed;
+    float disX = (event->globalX() - m_lastPos.x()) * m_rotateSpeed;
+    float disY = (event->globalY() - m_lastPos.y()) * m_rotateSpeed;
 
 //    cout << "Souris y " << disY << endl;
 //    cout << "Souris x " << disX << endl;
@@ -144,22 +192,13 @@ void GlFrame::mouseMoveEvent(QMouseEvent *event)
 
     QPoint glob = mapToGlobal(QPoint(width()/2,height()/2));
     QCursor::setPos(glob);
-    lastPos = QPoint(width()/2,height()/2);
+    m_lastPos = QPoint(width()/2,height()/2);
 }
 
-
-
-void GlFrame::mousePressEvent(QMouseEvent *event)
-{
-    if(isFullScreen())
-        return;
-
-    lastPos.setX(event->globalX());
-    lastPos.setY(event->globalY());
-}
-
-
-
+///
+/// \brief GlFrame::mouseDoubleClickEvent
+///     Toggle fullscreen with double click
+///
 void GlFrame::mouseDoubleClickEvent(QMouseEvent *)
 {
     if(isFullScreen())
@@ -175,76 +214,77 @@ void GlFrame::mouseDoubleClickEvent(QMouseEvent *)
     }
 }
 
-void
-GlFrame::wheelEvent( QWheelEvent* event )
+///
+/// \brief GlFrame::wheelEvent
+///     Translates along Z axis with mouse wheel
+/// \param event
+///
+void GlFrame::wheelEvent( QWheelEvent* event )
 {
     if(event->delta() > 0)
-        translateCamera(-moveSpeed * timeSinceLastFrame, 0);
+        translateCamera(-m_moveSpeed * m_timeSinceLastFrame, 0);
     else
-       translateCamera(moveSpeed * timeSinceLastFrame, 0);
+       translateCamera(m_moveSpeed * m_timeSinceLastFrame, 0);
 }
 
+///
+/// \brief GlFrame::keyPressEvent
+///     Key Event handler, for translation and rotation
+///         ZS : move along Z
+///         QD : move along X
+///         RF : move along Y
+///
+///         Arrow keys : rotate camera
+///
+/// \param event
+///
 void GlFrame::keyPressEvent( QKeyEvent* event )
 {
     switch( event->key())
     {
             case Qt::Key_Left:
-                rotateCamera( rotateSpeed * timeSinceLastFrame, 0 );
+                rotateCamera( m_rotateSpeed * m_timeSinceLastFrame, 0 );
                 break;
 
             case Qt::Key_Right:
-                rotateCamera( -rotateSpeed * timeSinceLastFrame, 0);
+                rotateCamera( -m_rotateSpeed * m_timeSinceLastFrame, 0);
                 break;
 
             case Qt::Key_Up:
-                rotateCamera( 0, rotateSpeed * timeSinceLastFrame );
+                rotateCamera( 0, m_rotateSpeed * m_timeSinceLastFrame );
                 break;
 
             case Qt::Key_Down:
-                rotateCamera( 0, -rotateSpeed * timeSinceLastFrame);
+                rotateCamera( 0, -m_rotateSpeed * m_timeSinceLastFrame);
                 break;  
 
             case Qt::Key_D:
-                translateCamera(0, moveSpeed * timeSinceLastFrame);
+                translateCamera(0, m_moveSpeed * m_timeSinceLastFrame);
                 break;
 
             case Qt::Key_Q:
-                translateCamera(0, -moveSpeed * timeSinceLastFrame);
+                translateCamera(0, -m_moveSpeed * m_timeSinceLastFrame);
                 break;
 
             case Qt::Key_Z:
-                translateCamera(moveSpeed * timeSinceLastFrame, 0);
+                translateCamera(m_moveSpeed * m_timeSinceLastFrame, 0);
                 break;
 
             case Qt::Key_S:
-                translateCamera(-moveSpeed * timeSinceLastFrame, 0);
+                translateCamera(-m_moveSpeed * m_timeSinceLastFrame, 0);
                 break;
 
             case Qt::Key_R:
-                g_Camera->translateY(moveSpeed * timeSinceLastFrame);
+                m_Camera->translateY(m_moveSpeed * m_timeSinceLastFrame);
                 break;
 
             case Qt::Key_F:
-                g_Camera->translateY(-moveSpeed * timeSinceLastFrame);
+                m_Camera->translateY(-m_moveSpeed * m_timeSinceLastFrame);
                 break;
     }
 }
 
-
-void GlFrame::addParticleSystem(ParticleSystem *ps)
-{
-    if(ps != NULL)
-        p_systems.push_back(ps);
-    else
-        std::cout << "ALERTE AU GOGOLE !";
-}
-
-
-void GlFrame::clear()
-{
-    p_systems.clear();
-}
-
+/***** Size Hints *****/
 
 QSize GlFrame::minimumSizeHint() const
 {

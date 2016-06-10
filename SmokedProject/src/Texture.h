@@ -6,12 +6,12 @@
 #include <QGLWidget>
 #include <QImage>
 
+// static class to load textures from filePath
+
 class Texture
 {
-public:
-    Texture();
-
-    static GLuint loadTexture(char* t);
+    public:
+        static GLuint loadTexture(char* t);
 };
 
 #endif // TEXTURE_H

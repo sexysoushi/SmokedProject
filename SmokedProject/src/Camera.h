@@ -3,6 +3,8 @@
 #include "src/Common/GlFramework.h"
 #include "Quaternion.h"
 
+// self explanatory camera handling class using quaternions
+
 class Camera
 {
 
@@ -12,10 +14,10 @@ private:
     GLMatrix m_ViewMatrix;
     GLMatrix m_ProjectionMatrix;
 
-    float _aspectRatio;
-    float _nearPlane;
-    float _farPlane;
-    float _fieldOfView;
+    float m_aspectRatio;
+    float m_nearPlane;
+    float m_farPlane;
+    float m_fieldOfView;
 
 public:
     Camera();

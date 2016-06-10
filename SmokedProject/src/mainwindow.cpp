@@ -1,9 +1,17 @@
 #include "mainwindow.h"
 
+//////////////// PUBLIC //////////////
 
+///
+/// \brief MainWindow::MainWindow
+///     Window creation and initialization
+/// \param parent
+///
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {   
+    // Init widgets
+
     rateSlide = new QSlider(Qt::Horizontal);
     rateSlide->setRange(1,10000);
     rateSlide->setSingleStep(10);
@@ -40,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
     sizeSlide->setValue(1);
 
 
+    // connect buttons signals
+
     addButton = new QPushButton("Add System");
     connect(addButton, SIGNAL(clicked()), this, SLOT(addParticleSystem()));
 
@@ -63,6 +73,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     tornadoButton = new QPushButton("Tornado");
     connect(tornadoButton, SIGNAL(clicked()), this, SLOT(addTornadoSystem()));
+
+
+    // create layout
 
     QVBoxLayout* topLayout = new QVBoxLayout();
 
@@ -105,6 +118,9 @@ MainWindow::MainWindow(QWidget *parent) :
     topWidget->setLayout(topLayout);
     setCentralWidget(topWidget);
 
+
+    // when window is fully init, create GL window
+
     connect(this, SIGNAL(initDone(void)), this, SLOT(initGL(void)));
     emit initDone();
 }
@@ -112,6 +128,9 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
 }
+
+
+/***** Event handler *****/
 
 void MainWindow::keyPressEvent(QKeyEvent * event){
     switch(event->key()){
@@ -122,11 +141,49 @@ void MainWindow::keyPressEvent(QKeyEvent * event){
     }
 }
 
+
+///////////// PRIVATE /////////////
+
+///
+/// \brief MainWindow::addLabel
+///     Adds label in the selected layout
+/// \param l the layout
+/// \param t1 the label text
+///
+void MainWindow::addLabel(QLayout* l, char* t1){
+    QLabel* lb1 = new QLabel(t1);
+    lb1->setAlignment(Qt::AlignLeft);
+    l->addWidget(lb1);
+}
+
+
+///////////// PRIVATE SLOTS /////////////
+
+///
+/// \brief MainWindow::initGL
+///     Create GL window
+///
 void MainWindow::initGL(){
     gl = new GlFrame();
     gl->show();
 }
 
+///
+/// \brief MainWindow::clear
+///     Clear scene
+///
+void MainWindow::clear()
+{
+    gl->clear();
+}
+
+
+/****** PARTICLE SYSTEMS ADDS ******/
+
+///
+/// \brief MainWindow::addParticleSystem
+///     Create Particle System according to user inpts and add to the scene
+///
 void MainWindow::addParticleSystem()
 {
     ParticleSystem* s = new ParticleSystem(
@@ -146,10 +203,8 @@ void MainWindow::addParticleSystem()
     s->start();
 }
 
-void MainWindow::clear()
-{
-    gl->clear();
-}
+
+/***** PREMADE PARTICLE EFFECTS *****/
 
 void MainWindow::addWaterSystem()
 {
@@ -222,10 +277,4 @@ void MainWindow::addTornadoSystem()
 
     gl->addParticleSystem(s);
     s->start();
-}
-
-void MainWindow::addLabel(QLayout* l, char* t1){
-    QLabel* lb1 = new QLabel(t1);
-    lb1->setAlignment(Qt::AlignLeft);
-    l->addWidget(lb1);
 }

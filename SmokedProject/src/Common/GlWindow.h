@@ -7,6 +7,7 @@
 #include <QGLWidget>
 #include <QKeyEvent>
 
+// abstract QGLWidget
 
 class GlWindow : public QGLWidget, public GlFramework
 {
@@ -35,8 +36,8 @@ class GlWindow : public QGLWidget, public GlFramework
 		void paintGL();
 
 
-	private: // methods
-		void timerEvent(QTimerEvent *);
+    private: // methods
+        void timerEvent(QTimerEvent *);
 };
 
 

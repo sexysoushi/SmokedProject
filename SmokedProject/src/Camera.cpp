@@ -1,6 +1,10 @@
 #include "Camera.h"
 #include <iostream>
 
+/////////////// PUBLIC /////////////
+
+/***** LIFE CYCLE *****/
+
 Camera::Camera(){
     m_Orientation.setFromAxis(1, 0, 0, 0);
     m_ViewMatrix = GLMatrix();
@@ -15,13 +19,16 @@ Camera::Camera(float posX, float posY, float posZ):Camera(){
 
 Camera::Camera(float posX, float posY, float posZ, float ar, float np, float fp, float fov):
     Camera(posX, posY, posZ){
-    _aspectRatio = ar;
-    _nearPlane = np;
-    _farPlane = fp;
+    m_aspectRatio = ar;
+    m_nearPlane = np;
+    m_farPlane = fp;
     _fieldOfView = fov;
 }
 
 Camera::~Camera(){}
+
+
+/***** TRANSLATIONS *****/
 
 void Camera::translate(float x, float y, float z){
     Vec3 tmpVec;
@@ -43,6 +50,9 @@ void Camera::translateY(float shift){
 void Camera::translateZ(float shift){
     m_position.z += shift;
 }
+
+
+/***** ROTATIONS *****/
 
 void Camera::rotate(float angle, float ax, float ay, float az){
     Vec3 tmpVect;
@@ -78,19 +88,22 @@ void Camera::rotateZ(float angle){
     m_Orientation = tmpQuat * m_Orientation;
 }
 
+
+/***** OPERATIONS *****/
+
 GLMatrix const& Camera::getViewMatrix(){
     buildViewMatrix();
     return m_ViewMatrix;
 }
 
 void Camera::setAspectRatio(float ar){
-    _aspectRatio = ar;
+    m_aspectRatio = ar;
     buildProjectionMatrix();
 }
 
 void Camera::setPlanes(float np, float fp){
-    _nearPlane = np;
-    _farPlane = fp;
+    m_nearPlane = np;
+    m_farPlane = fp;
     buildProjectionMatrix();
 }
 
@@ -98,6 +111,9 @@ void Camera::setFOV(float angle){
     _fieldOfView = angle;
     buildProjectionMatrix();
 }
+
+
+/***** GETTERS *****/
 
 GLMatrix const& Camera::getProjectionMatrix(){
     buildProjectionMatrix();
@@ -114,23 +130,26 @@ Vec3 Camera::getPosition()
     return m_position;
 }
 
+
+/////////////// PROTECTED //////////////
+
 void Camera::buildProjectionMatrix(){
     float thetaY = 0.5f * (M_PI * _fieldOfView / 180.0f);
     float tanThetaY = tan(thetaY);
-    float tanThetaX = tanThetaY * _aspectRatio;
-    float halfW = tanThetaX * _nearPlane;
-    float halfH = tanThetaY * _nearPlane;
+    float tanThetaX = tanThetaY * m_aspectRatio;
+    float halfW = tanThetaX * m_nearPlane;
+    float halfH = tanThetaY * m_nearPlane;
     float left = -halfW;
     float right = halfW;
     float bottom = -halfH;
     float top = halfH;
     float iWidth = 1.0f / (right - left);
     float iHeight = 1.0f / (top - bottom);
-    float iDepth = 1.0f / (_nearPlane - _farPlane);
+    float iDepth = 1.0f / (m_nearPlane - m_farPlane);
 
-    m_ProjectionMatrix.m[0][0] = 2.0f * _nearPlane * iWidth ;m_ProjectionMatrix.m[0][1] = 0.0f                          ;m_ProjectionMatrix.m[0][2] = (right + left) * iWidth            ;m_ProjectionMatrix.m[0][3] = 0.0f ;
-    m_ProjectionMatrix.m[1][0] = 0.0f                       ;m_ProjectionMatrix.m[1][1] = 2.0f * _nearPlane * iHeight   ;m_ProjectionMatrix.m[1][2] = (top + bottom) * iHeight           ;m_ProjectionMatrix.m[1][3] = 0.0f ;
-    m_ProjectionMatrix.m[2][0] = 0.0f                       ;m_ProjectionMatrix.m[2][1] = 0.0f                          ;m_ProjectionMatrix.m[2][2] = -(_farPlane + _nearPlane) * iDepth ;m_ProjectionMatrix.m[2][3] = -2.0f * (_farPlane * _nearPlane) * iDepth ;
+    m_ProjectionMatrix.m[0][0] = 2.0f * m_nearPlane * iWidth ;m_ProjectionMatrix.m[0][1] = 0.0f                          ;m_ProjectionMatrix.m[0][2] = (right + left) * iWidth            ;m_ProjectionMatrix.m[0][3] = 0.0f ;
+    m_ProjectionMatrix.m[1][0] = 0.0f                       ;m_ProjectionMatrix.m[1][1] = 2.0f * m_nearPlane * iHeight   ;m_ProjectionMatrix.m[1][2] = (top + bottom) * iHeight           ;m_ProjectionMatrix.m[1][3] = 0.0f ;
+    m_ProjectionMatrix.m[2][0] = 0.0f                       ;m_ProjectionMatrix.m[2][1] = 0.0f                          ;m_ProjectionMatrix.m[2][2] = -(m_farPlane + m_nearPlane) * iDepth ;m_ProjectionMatrix.m[2][3] = -2.0f * (m_farPlane * m_nearPlane) * iDepth ;
     m_ProjectionMatrix.m[3][0] = 0.0f                       ;m_ProjectionMatrix.m[3][1] = 0.0f                          ;m_ProjectionMatrix.m[3][2] = -1.0f                              ;m_ProjectionMatrix.m[3][3] = 0.0f ;
 }
 

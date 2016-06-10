@@ -15,11 +15,13 @@
 #include <QImage>
 #include <QGLWidget>
 
+// time handler type definition
 typedef std::chrono::steady_clock Clock;
 
+// Particle object definition
 struct Particle{
     vec3   position;
-    vec3   velocity; // vitesse orientée sur un axe
+    vec3   velocity; // speed * normalized direction
     Clock::time_point startTime;
 };
 
@@ -28,55 +30,53 @@ class ParticleSystem : public Object3D
 
 private:
     // particle system parameters
-    vec3 position;
-    vec3 orientation;
-    float rate;
-    int nbMax;
-    float maxTimeAlive;
-    float spread;
-    float pointSize;
+    vec3 m_position;
+    vec3 m_orientation;
+    float m_rate;
+    int m_nbMax;
+    float m_maxTimeAlive;
+    float m_spread;
+    float m_pointSize;
 
-    float speed;
-    float gravity;
-    vec3 down;
+    float m_speed;
+    float m_gravity;
+    vec3 m_down;
 
-    bool started;
+    bool m_started;
 
-    bool transparent;
+    bool m_transparent;
 
     // particles array
-    std::deque<Particle*> TabParticle;
+    std::deque<Particle*> m_TabParticle;
 
     // GL data
-    float* positions;
-    float* velocities;
-    float* ages;
+    float* gl_positions;
+    float* gl_velocities;
+    float* gl_ages;
 
-    std::string shader;
-    GLuint texId;
+    std::string gl_shader;
+    GLuint gl_texId;
 
     // timers
-    Clock::time_point first = std::chrono::steady_clock::now();
-    Clock::time_point lastTrigger = first;
-    Clock::time_point currentTime = first;
-    float timeSinceLastTrigger;
-    float timeSinceLastFrame;
+    Clock::time_point t_first = std::chrono::steady_clock::now();
+    Clock::time_point t_lastTrigger = t_first;
+    Clock::time_point t_currentTime = t_first;
+    float t_timeSinceLastTrigger;
+    float t_timeSinceLastFrame;
 
-    RandomNumberGenerator randomG;
+    RandomNumberGenerator m_randomG;
 
-
-    void particleMotion(Particle* particle);
+    // operations
+    void update();
     void addParticle();
-    void resetParticle(Particle* particle);
-
-    void buildArrays();
-    vec3 randomVector();
-
-    float timeInterval(Clock::time_point start, Clock::time_point end);
-
     void deleteDeadParticles();
-    void updateTime();
 
+    void buildGLBuffers();
+    vec3 getRandomVector();
+
+    float elapsedTime(Clock::time_point start, Clock::time_point end);
+
+    void drawShape();
 
 public:
     ParticleSystem();
@@ -84,22 +84,21 @@ public:
 
     ~ParticleSystem();
 
+    // life cycle
     void start();
     void stop();
-
-    void setShader(std::string s);
-    void loadTexture(char* t);
-    void setTransparent(bool b);
 
     bool isStarted();
 
     void clear();
 
+    // parameters setters
+    void setShader(std::string s);
+    void loadTexture(char* t);
+    void setTransparent(bool b);
+
+    // redefinition from Object3D
     void draw();
-
-protected:
-    void drawShape();
-
 };
 
 #endif // PARTICLESYSTEM_H

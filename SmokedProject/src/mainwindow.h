@@ -11,7 +11,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-
+// main window for Particle System demonstrator
 
 class MainWindow : public QMainWindow
 {
@@ -22,8 +22,10 @@ class MainWindow : public QMainWindow
         ~MainWindow();
 
     private:
+        // The GL Widget
         GlFrame* gl;
 
+        // sliders for parameters
         QSlider* rateSlide;
         QSlider* nbMaxSlide;
         QSlider* maxTimeSlide;
@@ -32,9 +34,11 @@ class MainWindow : public QMainWindow
         QSlider* spreadSlide;
         QSlider* sizeSlide;
 
+        // custom particle system commands
         QPushButton* addButton;
         QPushButton* clearButton;
 
+        // premade effects buttons
         QPushButton* waterButton;
         QPushButton* lavaButton;
         QPushButton* smokeButton;
@@ -46,14 +50,18 @@ class MainWindow : public QMainWindow
 
         void addLabel(QLayout *l, char *t1);
 
-signals:
+    signals:
         void initDone();
 
-private slots:
+    private slots:
+        // at startup
         void initGL();
+
+        // custom particle system commands
         void addParticleSystem();
         void clear();
 
+        // premade effects commands
         void addWaterSystem();
         void addLavaSystem();
         void addSmokeSystem();

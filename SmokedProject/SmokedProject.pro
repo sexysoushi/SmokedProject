@@ -29,7 +29,6 @@ HEADERS  += \
     src/Common/Types.h \
     src/Common/Vectors.h \
     src/particlesystem.h \
-    src/Common/Shapes/cube.h \
     src/Quaternion.h \
     src/Camera.h \
     src/mainwindow.h \
@@ -45,7 +44,6 @@ SOURCES += src/main.cpp\
     src/Common/Shapes/Basis.cpp \
     src/Common/RandomNumberGenerator.cpp \
     src/particlesystem.cpp \
-    src/Common/Shapes/cube.cpp \
     src/Quaternion.cpp \
     src/Camera.cpp \
     src/mainwindow.cpp \
