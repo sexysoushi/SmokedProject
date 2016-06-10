@@ -341,25 +341,23 @@ void ParticleSystem::drawShape()
     GLuint d = glGetUniformLocation(m_Framework->getCurrentShaderId(), "down");
     glUniform3f(d, m_down.x, m_down.y, m_down.z);
 
-    GLint p = glGetAttribLocation( m_Framework->getCurrentShaderId(), "position" );
-    glEnableVertexAttribArray( p );
-
-    GLint v = glGetAttribLocation( m_Framework->getCurrentShaderId(), "velocity" );
-    glEnableVertexAttribArray( v );
-
-    GLint a = glGetAttribLocation( m_Framework->getCurrentShaderId(), "age" );
-    glEnableVertexAttribArray( a );
-
-    GLint t = glGetAttribLocation( m_Framework->getCurrentShaderId(), "tc" );
-
 
     // vertex data
 
+    GLint p = glGetAttribLocation( m_Framework->getCurrentShaderId(), "position" );
+    glEnableVertexAttribArray( p );
     glVertexAttribPointer( p, 3, GL_FLOAT, GL_FALSE, 0, gl_positions );
+
+    GLint v = glGetAttribLocation( m_Framework->getCurrentShaderId(), "velocity" );
+    glEnableVertexAttribArray( v );
     glVertexAttribPointer( v, 3, GL_FLOAT, GL_TRUE, 0, gl_velocities );
+
+    GLint a = glGetAttribLocation( m_Framework->getCurrentShaderId(), "age" );
+    glEnableVertexAttribArray( a );
     glVertexAttribPointer( a, 1, GL_FLOAT, GL_FALSE, 0, gl_ages );
 
-    // texture loading and drawing
+
+    // texture loading, drawing
 
     if(gl_texId != -1)
     {
@@ -379,7 +377,6 @@ void ParticleSystem::drawShape()
     glDisableVertexAttribArray( v );
     glDisableVertexAttribArray( p );
     glDisableVertexAttribArray( a );
-    glDisableVertexAttribArray( t );
 
     if(m_transparent)
         glEnable(GL_DEPTH_TEST);

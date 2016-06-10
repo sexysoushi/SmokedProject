@@ -22,7 +22,7 @@ Camera::Camera(float posX, float posY, float posZ, float ar, float np, float fp,
     m_aspectRatio = ar;
     m_nearPlane = np;
     m_farPlane = fp;
-    _fieldOfView = fov;
+    m_fieldOfView = fov;
 }
 
 Camera::~Camera(){}
@@ -108,7 +108,7 @@ void Camera::setPlanes(float np, float fp){
 }
 
 void Camera::setFOV(float angle){
-    _fieldOfView = angle;
+    m_fieldOfView = angle;
     buildProjectionMatrix();
 }
 
@@ -134,7 +134,7 @@ Vec3 Camera::getPosition()
 /////////////// PROTECTED //////////////
 
 void Camera::buildProjectionMatrix(){
-    float thetaY = 0.5f * (M_PI * _fieldOfView / 180.0f);
+    float thetaY = 0.5f * (M_PI * m_fieldOfView / 180.0f);
     float tanThetaY = tan(thetaY);
     float tanThetaX = tanThetaY * m_aspectRatio;
     float halfW = tanThetaX * m_nearPlane;
